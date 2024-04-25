@@ -53,6 +53,22 @@ applicationVariants.forEach { variant ->
 }
 ```
 
+#### Adicionar dependências do room
+````groovy
+// ROOM
+implementation(libs.androidx.room.runtime)
+implementation(libs.androidx.room.ktx)
+ksp(libs.androidx.room.compiler)
+````
+#### Configurar arquivos gerados pelo KSP
+Adicionar localizacao do schema
+````groovy
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+````
+
+
 
 
 

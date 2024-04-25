@@ -21,6 +21,7 @@ android {
         }
 
         ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
             arg("KOIN_CONFIG_CHECK","true")
         }
     }
@@ -77,6 +78,10 @@ dependencies {
     implementation(libs.koin.annotations)
     implementation(libs.koin.androidx.compose)
     ksp(libs.koin.ksp.compiler)
+    // ROOM
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
