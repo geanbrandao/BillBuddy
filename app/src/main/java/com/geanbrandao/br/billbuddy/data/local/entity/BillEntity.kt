@@ -8,5 +8,5 @@ import java.util.Date
 @Entity(tableName = "bills")
 data class BillEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val name: String,
+    val name: String, // TODO adicionar status de conta aberta ou fechada
 )
