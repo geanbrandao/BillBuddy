@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Racha Conta</string>
+
+    <string name="screen_bills_top_bar_title">Contas</string>
+
+    <string name="screen_create_bill_top_bar_title">Criar uma conta</string>
+
+    <string name="screen_bill_details_top_bar_title">Rachar conta</string>
+
+    <string name="screen_create_item_top_bar_title">Adicionar item</string>
+
+    <string name="screen_close_bill_top_bar_title">Fechar conta</string>
 </resources>
