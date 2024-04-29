@@ -84,6 +84,8 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     // NAVIGATION
     implementation(libs.androidx.navigation.compose)
+    // SPLASH SCREEN
+    implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

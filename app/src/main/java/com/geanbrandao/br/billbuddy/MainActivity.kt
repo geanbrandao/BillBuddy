@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.geanbrandao.br.billbuddy.presentation.navigation.NavigationView
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 
@@ -17,6 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        installSplashScreen()
         setContent {
             BillBuddyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
