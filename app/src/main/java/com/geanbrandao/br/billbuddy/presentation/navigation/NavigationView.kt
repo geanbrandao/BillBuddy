@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.geanbrandao.br.billbuddy.presentation.bills.BillsScreen
 
 @Composable
 fun NavigationView(
@@ -16,7 +16,7 @@ fun NavigationView(
 
     NavHost(navController = navController, startDestination = Screen.Bills.route, modifier = modifier) {
         composable(Screen.Bills.route) {
-            Text(text = "Bills")
+            BillsScreen()
         }
         composable(Screen.Bill.route) {
             Text(text = "Bill")

@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,18 +30,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val canNavigateBack = remember { mutableStateOf(false) }
-            val screenTitle = remember { mutableStateOf(Screen.Bills.title) }
+            val screenTitle = remember { mutableIntStateOf(Screen.Bills.title) }
             onDestinationHandle(
                 navController,
                 updateNavigateBack = {canNavigateBack.value = it },
-                updateScreenTitle = { screenTitle.value = it },
+                updateScreenTitle = { screenTitle.intValue = it },
             )
-            BillBuddyTheme {
+            // TODO temporário
+            BillBuddyTheme(darkTheme = false) {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         TopAppBarView(
-                            title = stringResource(id = screenTitle.value),
+                            title = stringResource(id = screenTitle.intValue),
                             canNavigateBack = canNavigateBack.value,
                             onArrowBackClicked = { navController.popBackStack() }
                         )

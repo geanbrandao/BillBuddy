@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="Theme.BillBuddy.SplashScreen" parent="Theme.SplashScreen">
-        <item name="android:windowSplashScreenBackground">#86D1EA</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="android:windowSplashScreenIconBackgroundColor">#FFFFFF</item>
+        <item name="android:windowSplashScreenBackground">#86D1EA</item>
+        <item name="android:windowSplashScreenAnimationDuration">1000</item>
         <item name="postSplashScreenTheme">@style/Theme.AppCompat.NoActionBar</item>
     </style>
 </resources>
