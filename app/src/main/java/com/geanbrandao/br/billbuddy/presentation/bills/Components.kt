@@ -1,7 +1,6 @@
 package com.geanbrandao.br.billbuddy.presentation.bills
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,8 +36,8 @@ fun BillItem(
 
 @Composable
 private fun BillItemView(
-    onRemoveClicked: () -> Unit = {},
     modifier: Modifier = Modifier,
+    onRemoveClicked: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -59,12 +59,13 @@ private fun BillItemView(
             Spacer(modifier = Modifier
                 .weight(1f)
                 .padding(all = PaddingOne))
-            Icon(
-                imageVector = Icons.Rounded.Delete,
-                tint = MaterialTheme.colorScheme.error,
-                contentDescription = "Remover conta",
-                modifier = Modifier.clickable { onRemoveClicked() }
-            )
+            IconButton(onClick = onRemoveClicked) {
+                Icon(
+                    imageVector = Icons.Rounded.Delete,
+                    tint = MaterialTheme.colorScheme.error,
+                    contentDescription = "Remover conta",
+                )
+            }
         }
         Spacer(modifier = Modifier.size(PaddingTwo))
         Row(

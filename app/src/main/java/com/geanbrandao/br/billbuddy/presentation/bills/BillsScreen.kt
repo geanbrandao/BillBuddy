@@ -9,16 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
@@ -69,44 +68,10 @@ private fun BillsView(
         }
         ConfirmationDialog(
             isVisible = isVisible.value,
+            title = "",
+            message = "",
             onDismiss = { isVisible.value = false },
             onConfirm = { isVisible.value = false },
-        )
-    }
-}
-
-@Composable
-private fun ConfirmationDialog(
-    isVisible: Boolean,
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit,
-) {
-
-    if (isVisible) {
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            confirmButton = {
-                TextButton(onClick = onConfirm) {
-                    Text(text = "Excluir")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = onDismiss) {
-                    Text(text = "Cancelar")
-                }
-            },
-            title = {
-                Text(
-                    text = "Deseja excluir essa conta?",
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            },
-            text = {
-                Text(
-                    text = "Todas os dados e pessoas dessa conta serão removidos.",
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
         )
     }
 }
