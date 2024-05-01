@@ -20,13 +20,28 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarView(
+fun CustomTopAppBar(
     title: String,
     canNavigateBack: Boolean,
     onArrowBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
+) {
+    CustomTopAppBarView(
+        modifier = modifier,
+        title = title,
+        canNavigateBack = canNavigateBack,
+        onArrowBackClicked = onArrowBackClicked,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CustomTopAppBarView(
+    modifier: Modifier = Modifier,
+    title: String = "Screen Name",
+    canNavigateBack: Boolean = true,
+    onArrowBackClicked: () -> Unit = {},
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     CenterAlignedTopAppBar(
@@ -48,7 +63,7 @@ fun TopAppBarView(
                 IconButton(onClick = onArrowBackClicked) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = "Localized description"
+                        contentDescription = "Ícone de voltar",
                     )
                 }
             }
@@ -65,11 +80,7 @@ private fun TopAppBarPreview() {
     BillBuddyTheme {
         Scaffold(
             topBar = {
-                TopAppBarView(
-                    title = "TopAppBar",
-                    canNavigateBack = false,
-                    onArrowBackClicked = {}
-                )
+                CustomTopAppBarView()
             }
         ) { innerPadding ->
             LazyColumn(
