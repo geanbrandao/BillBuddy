@@ -2,6 +2,7 @@ package com.geanbrandao.br.billbuddy.presentation.bill
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -22,10 +23,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.geanbrandao.br.billbuddy.R
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.CornerSizeHalf
+import com.geanbrandao.br.billbuddy.ui.theme.PaddingHalf
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
 
@@ -44,9 +45,9 @@ fun BillNameInput(
 
 @Composable
 private fun BillNameInputView(
+    modifier: Modifier = Modifier,
     text: String = "",
     onTextChange: (String) -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
     val textFieldValue = remember { TextFieldValue(text = text) }
     TextField(
@@ -81,10 +82,10 @@ fun PersonNameInput(
 
 @Composable
 private fun PersonNameInputView(
+    modifier: Modifier = Modifier,
     text: String = "",
     onTextChange: (String) -> Unit = {},
     onAddPerson: () -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
     val textFieldValue = remember { TextFieldValue(text = text) }
     TextField(
@@ -126,11 +127,14 @@ fun PersonsList(
 
 @Composable
 private fun PersonsListView(
+    modifier: Modifier = Modifier,
     list: List<String> = listOf("Pessoa 1", "Pessoa 2", "Pessoa 3"),
     onRemoveClicked: () -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(PaddingHalf)
+    ) {
         item {
             Text(
                 text = "Quem está dividindo a conta?",
@@ -142,12 +146,10 @@ private fun PersonsListView(
             Row(
                 verticalAlignment = Alignment.Bottom,
                 modifier = Modifier
-                    .padding(all = 1.dp)
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(CornerSizeHalf)
-                    )
-                    .padding(PaddingOne)
+                        shape = RoundedCornerShape(CornerSizeHalf),
+                    ).padding(PaddingOne)
             ) {
                 Text(
                     text = it,
