@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.geanbrandao.br.billbuddy.presentation.bill.BillScreen
+import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsScreen
 import com.geanbrandao.br.billbuddy.presentation.bills.BillsScreen
 
 @Composable
@@ -15,7 +16,7 @@ fun NavigationView(
     navController: NavHostController
 ) {
 
-    NavHost(navController = navController, startDestination = Screen.Bill.route, modifier = modifier) {
+    NavHost(navController = navController, startDestination = Screen.Bills.route, modifier = modifier) {
         composable(Screen.Bills.route) {
             BillsScreen()
         }
@@ -23,7 +24,7 @@ fun NavigationView(
             BillScreen()
         }
         composable(Screen.BillDetails.route) {
-            Text(text = "Racha Conta")
+            BillDetailsScreen()
         }
         composable(Screen.CreateItem.route) {
             Text(text = "Criar Item")
