@@ -22,5 +22,5 @@ data class ItemEntity(
     val name: String,
     val value: Float,
     val billId: Int,
-    val userId: Int,
+    val userId: Int, // todo remover o user ID e criar uma relação many to many entre item e usuário
 )

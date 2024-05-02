@@ -48,11 +48,9 @@ private fun BillDetailsView(
                     isVisible = isScrollingUp.not(),
                     onArrowBackClicked = { /*TODO*/ },
                     onEditClicked = {  }
-                )
+                ) // TODO adicionar botão de fechar conta
                 val range = 1..10
-                range.let {
 
-                }
                 LazyColumn(
                     state = listState,
                     verticalArrangement = Arrangement.spacedBy(PaddingTwo),

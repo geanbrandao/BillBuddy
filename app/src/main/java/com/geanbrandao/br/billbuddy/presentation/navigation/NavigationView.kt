@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.geanbrandao.br.billbuddy.presentation.bill.BillScreen
 import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsScreen
 import com.geanbrandao.br.billbuddy.presentation.bills.BillsScreen
+import com.geanbrandao.br.billbuddy.presentation.createitem.CreateItemScreen
 
 @Composable
 fun NavigationView(
@@ -27,7 +28,7 @@ fun NavigationView(
             BillDetailsScreen()
         }
         composable(Screen.CreateItem.route) {
-            Text(text = "Criar Item")
+            CreateItemScreen()
         }
         composable(Screen.CloseBill.route) {
             Text(text = "Fechar Conta")
