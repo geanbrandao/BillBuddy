@@ -17,3 +17,5 @@ val TopAppBarHeight = 64.dp
 val ElevationOne = 4.dp
 
 val CheckboxRowHeight = 56.dp
+
+val BorderWidthOne = 1.dp

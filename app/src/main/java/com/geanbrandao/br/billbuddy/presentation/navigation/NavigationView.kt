@@ -1,6 +1,5 @@
 package com.geanbrandao.br.billbuddy.presentation.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -9,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.geanbrandao.br.billbuddy.presentation.bill.BillScreen
 import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsScreen
 import com.geanbrandao.br.billbuddy.presentation.bills.BillsScreen
+import com.geanbrandao.br.billbuddy.presentation.closebill.CloseBillScreen
 import com.geanbrandao.br.billbuddy.presentation.createitem.CreateItemScreen
 
 @Composable
@@ -31,7 +31,7 @@ fun NavigationView(
             CreateItemScreen()
         }
         composable(Screen.CloseBill.route) {
-            Text(text = "Fechar Conta")
+            CloseBillScreen()
         }
     }
 }

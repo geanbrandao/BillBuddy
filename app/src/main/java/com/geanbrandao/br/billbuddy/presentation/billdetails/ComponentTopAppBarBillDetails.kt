@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,12 +39,14 @@ fun TopAppBarBillDetails(
     isVisible: Boolean,
     onArrowBackClicked: () -> Unit,
     onEditClicked: () -> Unit,
+    onCloseBillClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBarBillDetailsView(
         isVisible = isVisible,
         onArrowBackClicked = onArrowBackClicked,
         onEditClicked = onEditClicked,
+        onCloseBillClicked = onCloseBillClicked,
         modifier = modifier,
     )
 }
@@ -54,6 +57,7 @@ private fun TopAppBarBillDetailsView(
     isVisible: Boolean = true,
     onArrowBackClicked: () -> Unit = {},
     onEditClicked: () -> Unit = {},
+    onCloseBillClicked: () -> Unit = {},
 ) {
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer,
@@ -118,6 +122,14 @@ private fun TopAppBarBillDetailsView(
                         )
                     }
                     Spacer(modifier = Modifier.size(PaddingTwo))
+                    Button(
+                        onClick = onCloseBillClicked,
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .padding(end = PaddingTwo)
+                    ) {
+                        Text(text = "Fechar conta")
+                    }
                 }
             }
         }

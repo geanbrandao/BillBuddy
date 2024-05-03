@@ -47,7 +47,8 @@ private fun BillDetailsView(
                 TopAppBarBillDetails(
                     isVisible = isScrollingUp.not(),
                     onArrowBackClicked = { /*TODO*/ },
-                    onEditClicked = {  }
+                    onEditClicked = {},
+                    onCloseBillClicked = {},
                 ) // TODO adicionar botão de fechar conta
                 val range = 1..10
 
@@ -76,7 +77,7 @@ private fun BillDetailsView(
                 )
             }
             FloatingActionButton(
-                onClick = { onAddItem() },
+                onClick = onAddItem,
                 modifier = Modifier
                     .align(alignment = Alignment.BottomEnd)
                     .padding(end = PaddingTwo, bottom = PaddingThree)

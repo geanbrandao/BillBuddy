@@ -48,7 +48,7 @@ fun TextFieldInput(
 @Composable
 fun TextFieldInputView(
     modifier: Modifier = Modifier,
-    text: String = "",
+    text: String = "1000",
     label: String = "",
     leadingIcon: Painter = painterResource(id = R.drawable.ic_text),
     trailingIcon: Painter? = null,
@@ -67,6 +67,7 @@ fun TextFieldInputView(
         modifier = modifier,
         singleLine = true,
         label = { Text(text = label) },
+//        prefix = { Text(text = "R$") }, // todo: adicionar prefixo
         leadingIcon = {
             Icon(
                 painter = leadingIcon,
@@ -105,7 +106,7 @@ fun TrailingIcon(
 private fun TextFieldInputPreview() {
     BillBuddyTheme {
         TextFieldInputView(
-            text = "",
+            text = "0,00",
             label = "Digite o texto",
         )
     }
