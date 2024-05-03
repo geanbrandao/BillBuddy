@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                         }
                     } else {
                         { }
-                    }
+                    },
                 ) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
                         Row {
