@@ -5,7 +5,7 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class NavigationViewModel(
-    private val appNavigator: AppNavigator,
+    appNavigator: AppNavigator,
 ): ViewModel() {
     val navigationChannel = appNavigator.navigationChannel
 }

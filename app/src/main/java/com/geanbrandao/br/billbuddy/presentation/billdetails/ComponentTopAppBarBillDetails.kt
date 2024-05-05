@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Edit
@@ -59,6 +60,7 @@ private fun TopAppBarBillDetailsView(
     onEditClicked: () -> Unit = {},
     onCloseBillClicked: () -> Unit = {},
 ) {
+    val lazyRowState = rememberLazyListState()
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier,
@@ -97,7 +99,8 @@ private fun TopAppBarBillDetailsView(
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(PaddingOne),
                         contentPadding = PaddingValues(all = PaddingTwo),
-                        modifier = Modifier.fillMaxWidth()
+                        state = lazyRowState,
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         items(listOf("Pessoa 1", "Pessoa 2", "Pessoa 3", "Pessoa 4", "Pessoa 5")) {
                             PersonItem()

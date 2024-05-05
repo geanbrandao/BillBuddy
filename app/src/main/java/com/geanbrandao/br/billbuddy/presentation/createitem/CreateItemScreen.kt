@@ -17,14 +17,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.geanbrandao.br.billbuddy.presentation.createitem.CreateItemNavigationIntent.NavigateBack
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingFour
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun CreateItemScreen() {
+fun CreateItemScreen(
+    viewModel: CreateItemViewModel = koinViewModel()
+) {
     CreateItemView(
+        onNavigationIntent = viewModel::handleNavigation
         // uiState
         // intents
         // navigationActions
@@ -34,6 +39,7 @@ fun CreateItemScreen() {
 @Composable
 private fun CreateItemView(
     modifier: Modifier = Modifier,
+    onNavigationIntent: (CreateItemNavigationIntent) -> Unit = {},
 ) {
     val scrollableState = rememberScrollState()
     Surface {
@@ -75,7 +81,7 @@ private fun CreateItemView(
             )
             Spacer(modifier = Modifier.weight(1f))
             Button(
-                onClick = { },
+                onClick = { onNavigationIntent(NavigateBack) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = PaddingFour, top = PaddingThree)

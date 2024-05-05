@@ -17,19 +17,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.geanbrandao.br.billbuddy.presentation.bills.BillsNavigationIntent.NavigateToBill
 import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun BillsScreen() {
-    BillsView()
+fun BillsScreen(
+    viewModel: BillsViewModel = koinViewModel()
+) {
+    BillsView(
+        onNavigationIntent = viewModel::handleNavigation,
+    )
 }
 
 @Composable
 private fun BillsView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigationIntent: (BillsNavigationIntent) -> Unit = {}
 ) {
     val isVisible = remember { mutableStateOf(false) }
     Column(
@@ -55,11 +62,16 @@ private fun BillsView(
                     onRemoveClicked = {
                         isVisible.value = true
                     },
+                    onItemClicked = {
+                        onNavigationIntent(NavigateToBill(id = it))
+                    }
                 )
             }
         }
         Button(
-            onClick = { },
+            onClick = {
+                onNavigationIntent(NavigateToBill(-1))
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = PaddingTwo)

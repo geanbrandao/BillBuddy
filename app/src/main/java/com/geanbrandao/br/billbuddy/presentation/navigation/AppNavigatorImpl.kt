@@ -5,12 +5,11 @@ import kotlinx.coroutines.channels.Channel
 import org.koin.core.annotation.Single
 
 @Single
-class AppNavigatorImpl: AppNavigator {
-    override val navigationChannel: Channel<NavigationIntent>
-        get() = Channel(
-            capacity = Int.MAX_VALUE,
-            onBufferOverflow = BufferOverflow.DROP_LATEST
-        )
+class AppNavigatorImpl : AppNavigator {
+    override val navigationChannel = Channel<NavigationIntent>(
+        capacity = Int.MAX_VALUE,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
 
     override suspend fun navigateBack(route: String?, isInclusive: Boolean) {
         navigationChannel.send(

@@ -1,6 +1,7 @@
 package com.geanbrandao.br.billbuddy.presentation.bills
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,19 +31,29 @@ import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
 @Composable
 fun BillItem(
     onRemoveClicked: () -> Unit,
+    onItemClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BillItemView(modifier = modifier, onRemoveClicked = onRemoveClicked)
+    BillItemView(
+        modifier = modifier,
+        onRemoveClicked = onRemoveClicked,
+        onItemClicked = onItemClicked
+    )
 }
 
 @Composable
 private fun BillItemView(
     modifier: Modifier = Modifier,
     onRemoveClicked: () -> Unit = {},
+    onItemClicked: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .clickable(
+                role = Role.Button,
+                onClick = onItemClicked
+            )
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 shape = RoundedCornerShape(size = CornerSizeOne)

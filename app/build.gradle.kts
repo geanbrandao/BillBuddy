@@ -20,10 +20,7 @@ android {
             useSupportLibrary = true
         }
 
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-            arg("KOIN_CONFIG_CHECK","true")
-        }
+
     }
 
     applicationVariants.forEach { variant ->
@@ -42,6 +39,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("KOIN_CONFIG_CHECK","true")
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

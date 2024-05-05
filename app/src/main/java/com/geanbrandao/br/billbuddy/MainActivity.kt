@@ -4,13 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -58,29 +54,10 @@ class MainActivity : ComponentActivity() {
                         { }
                     },
                 ) { innerPadding ->
-                    Column(modifier = Modifier.padding(innerPadding)) {
-                        Row {
-                            Button(onClick = { navController.navigate(Screen.Bills.route) }) {
-                                Text(text = "1")
-                            }
-                            Button(onClick = { navController.navigate(Screen.Bill.route) }) {
-                                Text(text = "2")
-                            }
-                            Button(onClick = { navController.navigate(Screen.BillDetails.route) }) {
-                                Text(text = "3")
-                            }
-                            Button(onClick = { navController.navigate(Screen.CreateItem.route) }) {
-                                Text(text = "4")
-                            }
-                            Button(onClick = { navController.navigate(Screen.CloseBill.route) }) {
-                                Text(text = "5")
-                            }
-                        }
-                        NavigationView(
-//                            modifier = Modifier.padding(innerPadding),
-                            navController = navController,
-                        )
-                    }
+                    NavigationView(
+                        modifier = Modifier.padding(innerPadding),
+                        navController = navController,
+                    )
                 }
             }
         }

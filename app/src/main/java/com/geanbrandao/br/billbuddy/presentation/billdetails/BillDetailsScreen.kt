@@ -21,20 +21,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsNavigationIntent.NavigateBack
+import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsNavigationIntent.NavigateToCloseBill
+import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsNavigationIntent.NavigateToCreateItem
 import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun BillDetailsScreen() {
-    BillDetailsView()
+fun BillDetailsScreen(
+    viewModel: BillDetailsViewModel = koinViewModel()
+) {
+    BillDetailsView(
+        onNavigationIntent = viewModel::handleNavigation
+    )
 }
 
 @Composable
 private fun BillDetailsView(
     modifier: Modifier = Modifier,
-    onAddItem: () -> Unit = {},
+    onNavigationIntent: (BillDetailsNavigationIntent) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
     val isConfirmationDialogVisible = remember { mutableStateOf(false) }
@@ -46,10 +54,11 @@ private fun BillDetailsView(
             ) {
                 TopAppBarBillDetails(
                     isVisible = isScrollingUp.not(),
-                    onArrowBackClicked = { /*TODO*/ },
+                    onArrowBackClicked = { onNavigationIntent(NavigateBack) },
                     onEditClicked = {},
-                    onCloseBillClicked = {},
-                ) // TODO adicionar botão de fechar conta
+                    onCloseBillClicked = { onNavigationIntent(NavigateToCloseBill(billId = -1)
+                    )},
+                )
                 val range = 1..10
 
                 LazyColumn(
@@ -77,7 +86,7 @@ private fun BillDetailsView(
                 )
             }
             FloatingActionButton(
-                onClick = onAddItem,
+                onClick = { onNavigationIntent(NavigateToCreateItem(billId = -1)) },
                 modifier = Modifier
                     .align(alignment = Alignment.BottomEnd)
                     .padding(end = PaddingTwo, bottom = PaddingThree)

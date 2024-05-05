@@ -12,19 +12,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.geanbrandao.br.billbuddy.presentation.bill.BillNavigationIntent.NavigateToBillDetails
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingFour
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun BillScreen() {
-    BillView()
+fun BillScreen(
+    viewModel: BillViewModel = koinViewModel()
+) {
+    BillView(
+        onNavigationIntent = viewModel::handleNavigation,
+    )
 }
 
 @Composable
 private fun BillView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigationIntent: (BillNavigationIntent) -> Unit = {}
 ) {
     Surface {
         Column(
@@ -51,7 +58,9 @@ private fun BillView(
                 modifier = Modifier.weight(1f)
             )
             Button(
-                onClick = { },
+                onClick = {
+                    onNavigationIntent(NavigateToBillDetails(-1))
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = PaddingFour, top = PaddingThree)
