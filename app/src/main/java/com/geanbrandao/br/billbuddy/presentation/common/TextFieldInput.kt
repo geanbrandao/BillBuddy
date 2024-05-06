@@ -6,10 +6,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -60,7 +60,7 @@ fun TextFieldInputView(
         keyboardType = KeyboardType.Text,
     )
 ) {
-    val textFieldValue = remember { TextFieldValue(text = text) }
+    val textFieldValue = TextFieldValue(text = text, selection = TextRange(text.length))
     TextField(
         value = textFieldValue,
         onValueChange = { onTextChange(it.text) },

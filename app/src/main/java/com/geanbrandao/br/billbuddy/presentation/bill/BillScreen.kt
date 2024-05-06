@@ -10,8 +10,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.geanbrandao.br.billbuddy.presentation.bill.BillIntent.OnAddNewPerson
+import com.geanbrandao.br.billbuddy.presentation.bill.BillIntent.OnBillNameChange
+import com.geanbrandao.br.billbuddy.presentation.bill.BillIntent.OnPersonNameChange
+import com.geanbrandao.br.billbuddy.presentation.bill.BillIntent.OnRemovePerson
 import com.geanbrandao.br.billbuddy.presentation.bill.BillNavigationIntent.NavigateToBillDetails
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingFour
@@ -23,7 +28,12 @@ import org.koin.androidx.compose.koinViewModel
 fun BillScreen(
     viewModel: BillViewModel = koinViewModel()
 ) {
+
+    val uiState = viewModel.uiState.collectAsState()
+
     BillView(
+        uiState = uiState.value,
+        onBillIntent = viewModel::handleIntents,
         onNavigationIntent = viewModel::handleNavigation,
     )
 }
@@ -31,6 +41,8 @@ fun BillScreen(
 @Composable
 private fun BillView(
     modifier: Modifier = Modifier,
+    uiState: BillUiState = BillUiState(),
+    onBillIntent: (BillIntent) -> Unit = {},
     onNavigationIntent: (BillNavigationIntent) -> Unit = {}
 ) {
     Surface {
@@ -41,26 +53,35 @@ private fun BillView(
         ) {
             Spacer(modifier = Modifier.size(PaddingThree))
             BillNameInput(
-                text = "",
-                onTextChange = {},
+                text = uiState.billName,
+                onTextChange = { text: String ->
+                    onBillIntent(OnBillNameChange(value = text))
+                },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.size(PaddingTwo))
             PersonNameInput(
-                text = "",
-                onTextChange = {},
-                onAddPerson = {},
+                text = uiState.personName,
+                onTextChange = { text: String ->
+                    onBillIntent(OnPersonNameChange(value = text))
+                },
+                onAddPerson = {
+                    onBillIntent(OnAddNewPerson(value = uiState.personName))
+                },
                 modifier = Modifier.fillMaxWidth()
             )
             PersonsList(
-                list = listOf("Pessoa 1", "Pessoa 2"),
-                onRemoveClicked = { },
+                list = uiState.persons,
+                onRemoveClicked = { personName: String ->
+                    onBillIntent(OnRemovePerson(value = personName))
+                },
                 modifier = Modifier.weight(1f)
             )
             Button(
                 onClick = {
                     onNavigationIntent(NavigateToBillDetails(-1))
                 },
+                enabled = uiState.isEnabled,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = PaddingFour, top = PaddingThree)
