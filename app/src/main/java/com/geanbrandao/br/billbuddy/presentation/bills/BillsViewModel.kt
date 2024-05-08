@@ -3,6 +3,7 @@ package com.geanbrandao.br.billbuddy.presentation.bills
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geanbrandao.br.billbuddy.data.local.dao.AppDao
+import com.geanbrandao.br.billbuddy.data.local.entity.UserWithItemDividedValue
 import com.geanbrandao.br.billbuddy.presentation.navigation.AppNavigator
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -19,8 +20,22 @@ class BillsViewModel(
 
     fun getXPTO() {
         viewModelScope.launch {
-            val result = appDao.getUsersWithItems()
+            val result = appDao.getUsersWithItemsAndDividedValues()
             println(result)
+            result.sortedBy { it.userId }.forEach { userWithItems ->
+                val userName = userWithItems.userName
+                val value = userWithItems.value
+                val item =  userWithItems.itemName
+                println("User: $userName, $item custou: $value")
+            }
+            val listByUser = result.groupBy { it.userId }
+            listByUser.forEach { userId: Long, u: List<UserWithItemDividedValue> ->
+                val sum = u.sumOf { it.value.toDouble() }
+                val value = String.format("%.2f", sum)
+                println("User: ${u[0].userName} gastou $value nos seguintes items: ")
+                println(u.joinToString { it.itemName })
+            }
+
             // create one bill
 //            val billSchemaVersion2Id = appDao.insertBill(
 //                BillEntity(

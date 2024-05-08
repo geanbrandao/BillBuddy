@@ -10,6 +10,7 @@ import com.geanbrandao.br.billbuddy.data.local.entity.ItemEntity
 import com.geanbrandao.br.billbuddy.data.local.entity.ItemWithUsers
 import com.geanbrandao.br.billbuddy.data.local.entity.UserEntity
 import com.geanbrandao.br.billbuddy.data.local.entity.UserItemCrossRef
+import com.geanbrandao.br.billbuddy.data.local.entity.UserWithItemDividedValue
 import com.geanbrandao.br.billbuddy.data.local.entity.UserWithItems
 
 @Dao
@@ -44,4 +45,9 @@ interface AppDao {
     @Query("SELECT * FROM users")
     suspend fun getUsersWithItems(): List<UserWithItems>
 
+    @Transaction
+    @Query("SELECT users.name as userName, users.userId, items.itemId, items.name as itemName, user_items_cross_ref.dividedValue as value " +
+            "FROM users, items, user_items_cross_ref " +
+            "WHERE users.userId = user_items_cross_ref.userId AND items.itemId = user_items_cross_ref.itemId")
+    suspend fun getUsersWithItemsAndDividedValues(): List<UserWithItemDividedValue>
 }
