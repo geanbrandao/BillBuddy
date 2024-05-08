@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.geanbrandao.br.billbuddy.data.local.database.DB_NAME
 import com.geanbrandao.br.billbuddy.data.local.database.Database
+import com.geanbrandao.br.billbuddy.data.local.migrations.Migrations
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
@@ -14,11 +15,14 @@ class AppModule {
 
     @Single
     fun provideDatabase(appContext: Context): Database {
-        return Room.databaseBuilder(
-            context = appContext,
-            klass = Database::class.java,
-            name = DB_NAME,
-        ).build()
+        return Room
+            .databaseBuilder(
+                context = appContext,
+                klass = Database::class.java,
+                name = DB_NAME,
+            )
+            .addMigrations(Migrations.MIGRATION_1_2)
+            .build()
     }
 
     @Single

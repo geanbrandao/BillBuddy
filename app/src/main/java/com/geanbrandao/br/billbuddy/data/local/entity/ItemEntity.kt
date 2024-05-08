@@ -18,9 +18,8 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["billId"])],
 )
 data class ItemEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val itemId: Long,
     val name: String,
     val value: Float,
-    val billId: Int,
-    val userId: Int, // todo remover o user ID e criar uma relação many to many entre item e usuário
+    val billId: Long,
 )
