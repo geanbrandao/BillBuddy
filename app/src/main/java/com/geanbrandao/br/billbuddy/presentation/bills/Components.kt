@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.geanbrandao.br.billbuddy.domain.model.BillModel
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.CornerSizeOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
@@ -30,12 +31,14 @@ import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
 
 @Composable
 fun BillItem(
+    billItem: BillModel,
     onRemoveClicked: () -> Unit,
     onItemClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BillItemView(
         modifier = modifier,
+        billItem = billItem,
         onRemoveClicked = onRemoveClicked,
         onItemClicked = onItemClicked
     )
@@ -44,6 +47,7 @@ fun BillItem(
 @Composable
 private fun BillItemView(
     modifier: Modifier = Modifier,
+    billItem: BillModel = BillModel(0, "Nome da conta", "Em aberto", "R$ 10,00"),
     onRemoveClicked: () -> Unit = {},
     onItemClicked: () -> Unit = {},
 ) {
@@ -64,7 +68,7 @@ private fun BillItemView(
             verticalAlignment = Alignment.Bottom
         ) {
             Text(
-                text = "Nome da conta",
+                text = billItem.name,
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleLarge,
             )
@@ -91,7 +95,7 @@ private fun BillItemView(
                 .weight(1f)
                 .padding(all = PaddingOne))
             Text(
-                text = "-------",
+                text = billItem.status,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
             )
@@ -108,7 +112,7 @@ private fun BillItemView(
                 .weight(1f)
                 .padding(all = PaddingOne))
             Text(
-                text = "R$ 154,34",
+                text = billItem.total,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
             )

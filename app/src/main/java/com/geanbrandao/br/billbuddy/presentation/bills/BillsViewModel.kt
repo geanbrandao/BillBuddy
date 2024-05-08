@@ -1,23 +1,28 @@
 package com.geanbrandao.br.billbuddy.presentation.bills
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.geanbrandao.br.billbuddy.data.local.dao.AppDao
-import com.geanbrandao.br.billbuddy.data.local.entity.UserWithItemDividedValue
+import com.geanbrandao.br.billbuddy.domain.usecase.UseCases
 import com.geanbrandao.br.billbuddy.presentation.navigation.AppNavigator
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
+private const val KEY_UI_STATE = "keyBillsUiState"
+
 @KoinViewModel
 class BillsViewModel(
     private val appNavigator: AppNavigator,
-    private val appDao: AppDao,
+    private val state: SavedStateHandle,
+    private val useCases: UseCases,
 ) : ViewModel() {
 
-    init {
-        getXPTO()
-    }
+    val uiState = state.getStateFlow(key = KEY_UI_STATE, BillsUiState())
 
+//    init {
+//        getXPTO()
+//    }
+/*
     fun getXPTO() {
         viewModelScope.launch {
             val result = appDao.getUsersWithItemsAndDividedValues()
@@ -140,11 +145,23 @@ class BillsViewModel(
 //            )
         }
     }
+*/
 
+    fun getBills() {
+        viewModelScope.launch {
+            useCases.getBillsUseCase().collect {
+                state[KEY_UI_STATE] = uiState.value.copy(bills = it)
+            }
+        }
+    }
     fun handleNavigation(intent: BillsNavigationIntent) {
         viewModelScope.launch {
             when (intent) {
                 is BillsNavigationIntent.NavigateToBill -> {
+                    appNavigator.navigateTo(route = intent.route)
+                }
+
+                is BillsNavigationIntent.NavigateToBillDetails -> {
                     appNavigator.navigateTo(route = intent.route)
                 }
             }

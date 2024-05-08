@@ -7,7 +7,7 @@ import com.geanbrandao.br.billbuddy.domain.model.BillStatus
 
 @Entity(tableName = "bills")
 data class BillEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Long,
     val name: String,
     val status: BillStatus,
 )
