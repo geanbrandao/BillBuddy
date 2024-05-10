@@ -31,6 +31,9 @@ interface AppDao {
     @Query("SELECT * FROM bills")
     suspend fun getBills(): List<BillEntity>
 
+    @Query("SELECT * FROM bills WHERE id = :billId")
+    suspend fun getBill(billId: Long): BillEntity
+
     @Query("SELECT * FROM users WHERE billId = :billId")
     suspend fun getUsers(billId: Int): List<UserEntity>
 
@@ -48,6 +51,8 @@ interface AppDao {
     @Transaction
     @Query("SELECT users.name as userName, users.userId, items.itemId, items.name as itemName, user_items_cross_ref.dividedValue as value " +
             "FROM users, items, user_items_cross_ref " +
-            "WHERE users.userId = user_items_cross_ref.userId AND items.itemId = user_items_cross_ref.itemId")
-    suspend fun getUsersWithItemsAndDividedValues(): List<UserWithItemDividedValue>
+            "WHERE users.userId = user_items_cross_ref.userId " +
+            "AND items.itemId = user_items_cross_ref.itemId " +
+            "AND items.billId = :billId AND users.billId = :billId")
+    suspend fun getUsersWithItemsAndDividedValues(billId: Long): List<UserWithItemDividedValue>
 }

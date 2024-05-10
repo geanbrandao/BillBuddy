@@ -3,6 +3,7 @@ package com.geanbrandao.br.billbuddy.data.local.repository
 import com.geanbrandao.br.billbuddy.data.local.dao.AppDao
 import com.geanbrandao.br.billbuddy.data.local.entity.BillEntity
 import com.geanbrandao.br.billbuddy.data.local.entity.ItemEntity
+import com.geanbrandao.br.billbuddy.data.local.entity.UserWithItemDividedValue
 import com.geanbrandao.br.billbuddy.domain.repository.LocalRepository
 import org.koin.core.annotation.Single
 
@@ -21,5 +22,13 @@ class LocalRepositoryImpl(
 
     override suspend fun getItems(billId: Long): List<ItemEntity> {
         return dao.getItems(billId)
+    }
+
+    override suspend fun getItemsDividedValue(billId: Long): List<UserWithItemDividedValue> {
+        return dao.getUsersWithItemsAndDividedValues(billId)
+    }
+
+    override suspend fun getBill(billId: Long): BillEntity {
+        return dao.getBill(billId = billId)
     }
 }

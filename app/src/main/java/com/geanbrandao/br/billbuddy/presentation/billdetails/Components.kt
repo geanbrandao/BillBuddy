@@ -1,15 +1,15 @@
 package com.geanbrandao.br.billbuddy.presentation.billdetails
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -22,23 +22,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.geanbrandao.br.billbuddy.R
+import com.geanbrandao.br.billbuddy.domain.model.ConsumedItemModel
+import com.geanbrandao.br.billbuddy.domain.model.DividedValueModel
+import com.geanbrandao.br.billbuddy.domain.model.SpentByPersonModel
+import com.geanbrandao.br.billbuddy.presentation.common.SwipeLeft
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.CornerSizeOne
-import com.geanbrandao.br.billbuddy.ui.theme.ElevationOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingHalf
-import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
 
 @Composable
 fun PersonItem(
+    person: SpentByPersonModel,
     modifier: Modifier = Modifier
 ) {
-    PersonItemView(modifier = modifier)
+    PersonItemView(modifier = modifier, person = person)
 }
 
 @Composable
 private fun PersonItemView(
     modifier: Modifier = Modifier,
+    person: SpentByPersonModel = SpentByPersonModel(billId = 1, personId = 1, name = "Pessoa 1", totalSpent = 45.0f),
 ) {
     Surface(
         modifier = modifier,
@@ -56,7 +60,7 @@ private fun PersonItemView(
                 contentDescription = "Ícone de voltar",
             )
             Text(
-                text = "Pessoa 1",
+                text = person.name,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
@@ -64,7 +68,7 @@ private fun PersonItemView(
                 color = MaterialTheme.colorScheme.onTertiaryContainer,
             )
             Text(
-                text = "R$ 45,00",
+                text = person.totalSpentFormatted,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
@@ -78,7 +82,7 @@ private fun PersonItemView(
 
 @Composable
 fun BillItem(
-    item: String,
+    item: ConsumedItemModel,
     onRemoveClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -92,53 +96,91 @@ fun BillItem(
 @Composable
 private fun BillItemView(
     modifier: Modifier = Modifier,
-    item: String = "",
+    item: ConsumedItemModel = getConsumedItemModel(),
     onRemoveClicked: () -> Unit = {},
 ) {
-    Surface(
-        color = MaterialTheme.colorScheme.surfaceContainer,
-        shape = RoundedCornerShape(CornerSizeOne),
-        shadowElevation = ElevationOne,
-        modifier = modifier,
-    ) {
-        Column(Modifier.padding(horizontal = PaddingTwo, vertical = PaddingOne).fillMaxWidth()) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
+    SwipeLeft(
+        onDeleteClicked = onRemoveClicked,
+        content = {
+            Column(
+                modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceContainer,
+                        shape = RoundedCornerShape(CornerSizeOne),
+                    )
+                    .padding(all = PaddingTwo)
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = item,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                IconButton(onClick = onRemoveClicked) {
-                    Icon(
-                        imageVector = Icons.Rounded.Delete,
-                        tint = MaterialTheme.colorScheme.error,
-                        contentDescription = "Remover conta",
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = item.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    Text(
+                        text = item.formatedValue,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
                     )
                 }
-            }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Bottom,
-                modifier = Modifier.fillMaxWidth().padding(top = PaddingOne)
-            ) {
-                Text(
-                    text = "Pessoa 1",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                Text(
-                    text = "R$ 4,50",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
+                Spacer(modifier = Modifier.size(PaddingTwo))
+                if (item.dividedValues.size == 1) {
+                    DividedByOne(item)
+                } else {
+                    DividedByMany(item)
+                }
             }
         }
+    )
+}
 
+@Composable
+private fun DividedByOne(item: ConsumedItemModel) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom,
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = item.dividedValues.first().userName,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
+    }
+}
+
+@Composable
+private fun DividedByMany(item: ConsumedItemModel) {
+    Text(
+        text = "Dividido entre ${item.dividedValues.size} pessoas",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.primary,
+    )
+    item.dividedValues.forEach { dividedValue ->
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = PaddingHalf)
+        ) {
+            Text(
+                text = dividedValue.userName,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                text = dividedValue.formatedValue,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
     }
 }
 
@@ -157,3 +199,13 @@ private fun BillItemPreview() {
         BillItemView()
     }
 }
+
+private fun getConsumedItemModel() = ConsumedItemModel(
+    itemId = 1,
+    name = "Coca-cola",
+    value = 10.0f,
+    dividedValues = listOf(
+        DividedValueModel(userId = 1, userName = "Pessoa 1", value = 5.0f),
+        DividedValueModel(userId = 2, userName = "Pessoa 2", value = 5.0f),
+    )
+)

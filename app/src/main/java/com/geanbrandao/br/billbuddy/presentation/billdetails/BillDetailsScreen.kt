@@ -4,9 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -14,52 +17,81 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
+import com.geanbrandao.br.billbuddy.domain.model.ConsumedItemModel
+import com.geanbrandao.br.billbuddy.domain.model.DividedValueModel
 import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsNavigationIntent.NavigateBack
 import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsNavigationIntent.NavigateToCloseBill
 import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsNavigationIntent.NavigateToCreateItem
 import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
+import com.geanbrandao.br.billbuddy.ui.theme.PaddingFive
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun BillDetailsScreen(
     viewModel: BillDetailsViewModel = koinViewModel()
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(key1 = lifecycleOwner) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.getBillDetails()
+        }
+    }
+    val uiState = viewModel.uiState.collectAsState()
     BillDetailsView(
-        onNavigationIntent = viewModel::handleNavigation
+        onNavigationIntent = viewModel::handleNavigation,
+        uiState = uiState.value,
     )
 }
 
 @Composable
 private fun BillDetailsView(
     modifier: Modifier = Modifier,
+    uiState: BillDetailsUiState = BillDetailsUiState(),
     onNavigationIntent: (BillDetailsNavigationIntent) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
     val isConfirmationDialogVisible = remember { mutableStateOf(false) }
-    val isScrollingUp by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+    val isScrollingUp = remember {  mutableStateOf(false) }
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemIndex }
+            .map { index -> index > 2 }
+            .distinctUntilChanged()
+            .collect {
+                isScrollingUp.value = it
+            }
+    }
+
     Surface {
         Box {
             Column(
                 modifier = modifier.fillMaxSize()
             ) {
                 TopAppBarBillDetails(
-                    isVisible = isScrollingUp.not(),
+                    isVisible = isScrollingUp.value.not(),
+                    billName = uiState.billName,
+                    uiState.totalValueFormatted,
+                    uiState.spentByPerson,
                     onArrowBackClicked = { onNavigationIntent(NavigateBack) },
                     onEditClicked = {},
                     onCloseBillClicked = { onNavigationIntent(NavigateToCloseBill(billId = -1)
                     )},
                 )
-                val range = 1..10
 
                 LazyColumn(
                     state = listState,
@@ -67,20 +99,28 @@ private fun BillDetailsView(
                     contentPadding = PaddingValues(all = PaddingTwo),
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    items(range.count()) {
+                    items(
+                        items = uiState.items,
+                        key = {
+                            it.itemId
+                        }
+                    ) { item: ConsumedItemModel ->
                         BillItem(
                             onRemoveClicked = {
                                 isConfirmationDialogVisible.value = true
                             },
-                            item = "Nome do item $it"
+                            item = item,
                         )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.size(PaddingFive))
                     }
                 }
                 
                 ConfirmationDialog(
                     isVisible = isConfirmationDialogVisible.value,
-                    title = "",
-                    message = "",
+                    title = "Deseja excluir esse item?",
+                    message = "Essa ação não pode ser desfeita",
                     onDismiss = { isConfirmationDialogVisible.value = false },
                     onConfirm = { isConfirmationDialogVisible.value = false },
                 )
@@ -97,46 +137,175 @@ private fun BillDetailsView(
     }
 }
 
-//@Composable
-//private fun LazyListState.isScrollingUp(): Boolean {
-//    var previousIndex by remember(this) { mutableIntStateOf(firstVisibleItemIndex) }
-//    var previousScrollOffset by remember(this) { mutableIntStateOf(firstVisibleItemScrollOffset) }
-//    return remember(this) {
-//        derivedStateOf {
-//            if (previousIndex != firstVisibleItemIndex) {
-//                previousIndex > firstVisibleItemIndex
-//            } else {
-//                previousScrollOffset >= firstVisibleItemScrollOffset
-//            }.also {
-//                previousIndex = firstVisibleItemIndex
-//                previousScrollOffset = firstVisibleItemScrollOffset
-//            }
-//        }
-//    }.value
-//}
-
-//@Composable
-//fun LazyListState.isScrollingUp(): State<Boolean> {
-//    return produceState(initialValue = true) {
-//        var lastIndex = 0
-//        var lastScroll = Int.MAX_VALUE
-//        snapshotFlow {
-//            firstVisibleItemIndex to firstVisibleItemScrollOffset
-//        }.collect { (currentIndex, currentScroll) ->
-//            if (currentIndex != lastIndex || currentScroll != lastScroll) {
-//                value = currentIndex < lastIndex ||
-//                        (currentIndex == lastIndex && currentScroll < lastScroll)
-//                lastIndex = currentIndex
-//                lastScroll = currentScroll
-//            }
-//        }
-//    }
-//}
-
 @Preview
 @Composable
 private fun BillDetailsPreview() {
+
     BillBuddyTheme {
-        BillDetailsView()
+        BillDetailsView(uiState = getFakeUiState())
     }
 }
+
+private fun getFakeUiState() = BillDetailsUiState(
+    billId = 1,
+    billName = "Nome da conta",
+    totalValue = 154.52f,
+    items = listOf(
+        ConsumedItemModel(
+            itemId = 1,
+            name = "Coca-cola",
+            value = 10.0f,
+            dividedValues = listOf(
+                DividedValueModel(
+                    userId = 1,
+                    userName = "Pessoa 1",
+                    value = 5.0f
+                ),
+                DividedValueModel(
+                    userId = 2,
+                    userName = "Pessoa 2",
+                    value = 5.0f
+                )
+            )
+        ),
+        ConsumedItemModel(
+            itemId = 2,
+            name = "Pizza",
+            value = 55f,
+            dividedValues = listOf(
+                DividedValueModel(
+                    userId = 1,
+                    userName = "Pessoa 1",
+                    value = 18.34f
+                ),
+                DividedValueModel(
+                    userId = 2,
+                    userName = "Pessoa 2",
+                    value = 18.33f
+                ),
+                DividedValueModel(
+                    userId = 3,
+                    userName = "Pessoa 3",
+                    value = 18.33f
+                )
+            )
+        ),
+        ConsumedItemModel(
+            itemId = 3,
+            name = "Coca-cola",
+            value = 10.0f,
+            dividedValues = listOf(
+                DividedValueModel(
+                    userId = 1,
+                    userName = "Pessoa 1",
+                    value = 5.0f
+                ),
+                DividedValueModel(
+                    userId = 2,
+                    userName = "Pessoa 2",
+                    value = 5.0f
+                )
+            )
+        ),
+        ConsumedItemModel(
+            itemId = 4,
+            name = "Pizza",
+            value = 55f,
+            dividedValues = listOf(
+                DividedValueModel(
+                    userId = 1,
+                    userName = "Pessoa 1",
+                    value = 18.34f
+                ),
+                DividedValueModel(
+                    userId = 2,
+                    userName = "Pessoa 2",
+                    value = 18.33f
+                ),
+                DividedValueModel(
+                    userId = 3,
+                    userName = "Pessoa 3",
+                    value = 18.33f
+                )
+            )
+        ),
+        ConsumedItemModel(
+            itemId = 5,
+            name = "Coca-cola",
+            value = 10.0f,
+            dividedValues = listOf(
+                DividedValueModel(
+                    userId = 1,
+                    userName = "Pessoa 1",
+                    value = 5.0f
+                ),
+                DividedValueModel(
+                    userId = 2,
+                    userName = "Pessoa 2",
+                    value = 5.0f
+                )
+            )
+        ),
+        ConsumedItemModel(
+            itemId = 6,
+            name = "Pizza",
+            value = 55f,
+            dividedValues = listOf(
+                DividedValueModel(
+                    userId = 1,
+                    userName = "Pessoa 1",
+                    value = 18.34f
+                ),
+                DividedValueModel(
+                    userId = 2,
+                    userName = "Pessoa 2",
+                    value = 18.33f
+                ),
+                DividedValueModel(
+                    userId = 3,
+                    userName = "Pessoa 3",
+                    value = 18.33f
+                )
+            )
+        ),
+        ConsumedItemModel(
+            itemId = 7,
+            name = "Coca-cola",
+            value = 10.0f,
+            dividedValues = listOf(
+                DividedValueModel(
+                    userId = 1,
+                    userName = "Pessoa 1",
+                    value = 5.0f
+                ),
+                DividedValueModel(
+                    userId = 2,
+                    userName = "Pessoa 2",
+                    value = 5.0f
+                )
+            )
+        ),
+        ConsumedItemModel(
+            itemId = 8,
+            name = "Pizza",
+            value = 55f,
+            dividedValues = listOf(
+                DividedValueModel(
+                    userId = 1,
+                    userName = "Pessoa 1",
+                    value = 18.34f
+                ),
+                DividedValueModel(
+                    userId = 2,
+                    userName = "Pessoa 2",
+                    value = 18.33f
+                ),
+                DividedValueModel(
+                    userId = 3,
+                    userName = "Pessoa 3",
+                    value = 18.33f
+                )
+            )
+        ),
+    )
+)

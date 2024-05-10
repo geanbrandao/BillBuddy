@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.geanbrandao.br.billbuddy.domain.model.SpentByPersonModel
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
@@ -38,6 +39,9 @@ import com.geanbrandao.br.billbuddy.ui.theme.TopAppBarHeight
 @Composable
 fun TopAppBarBillDetails(
     isVisible: Boolean,
+    billName: String,
+    totalValue: String,
+    items: List<SpentByPersonModel>,
     onArrowBackClicked: () -> Unit,
     onEditClicked: () -> Unit,
     onCloseBillClicked: () -> Unit,
@@ -48,6 +52,9 @@ fun TopAppBarBillDetails(
         onArrowBackClicked = onArrowBackClicked,
         onEditClicked = onEditClicked,
         onCloseBillClicked = onCloseBillClicked,
+        billName = billName,
+        totalValue = totalValue,
+        persons = items,
         modifier = modifier,
     )
 }
@@ -55,6 +62,9 @@ fun TopAppBarBillDetails(
 @Composable
 private fun TopAppBarBillDetailsView(
     modifier: Modifier = Modifier,
+    billName: String = "",
+    totalValue: String = "",
+    persons: List<SpentByPersonModel> = listOf(),
     isVisible: Boolean = true,
     onArrowBackClicked: () -> Unit = {},
     onEditClicked: () -> Unit = {},
@@ -77,7 +87,7 @@ private fun TopAppBarBillDetailsView(
                     )
                 }
                 Text(
-                    text = "Nome da conta",
+                    text = billName,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
@@ -102,8 +112,8 @@ private fun TopAppBarBillDetailsView(
                         state = lazyRowState,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        items(listOf("Pessoa 1", "Pessoa 2", "Pessoa 3", "Pessoa 4", "Pessoa 5")) {
-                            PersonItem()
+                        items(items = persons, key = { it.personId }) { person: SpentByPersonModel ->
+                            PersonItem(person)
                         }
                     }
                     Row(
@@ -118,7 +128,7 @@ private fun TopAppBarBillDetailsView(
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Text(
-                            text = "R$ 154,34",
+                            text = totalValue,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.ExtraBold,
@@ -129,7 +139,7 @@ private fun TopAppBarBillDetailsView(
                         onClick = onCloseBillClicked,
                         modifier = Modifier
                             .align(Alignment.End)
-                            .padding(end = PaddingTwo)
+                            .padding(end = PaddingTwo, bottom = PaddingOne)
                     ) {
                         Text(text = "Fechar conta")
                     }
@@ -143,6 +153,15 @@ private fun TopAppBarBillDetailsView(
 @Composable
 private fun TopAppBarBillPreview() {
     BillBuddyTheme {
-        TopAppBarBillDetailsView()
+        TopAppBarBillDetailsView(
+            billName = "Nome da conta",
+            totalValue = "R$ 154,52",
+            persons = listOf(
+                SpentByPersonModel(billId = 1, personId = 1, name = "Pessoa 1", totalSpent = 45.0f),
+                SpentByPersonModel(billId = 1, personId = 2, name = "Pessoa 2", totalSpent = 55.0f),
+                SpentByPersonModel(billId = 1, personId = 3, name = "Pessoa 3", totalSpent = 62.3f),
+                SpentByPersonModel(billId = 1, personId = 4, name = "Pessoa 4", totalSpent = 31.4f),
+            )
+        )
     }
 }
