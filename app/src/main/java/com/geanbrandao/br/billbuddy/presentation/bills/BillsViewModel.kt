@@ -3,6 +3,7 @@ package com.geanbrandao.br.billbuddy.presentation.bills
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.geanbrandao.br.billbuddy.data.local.dao.AppDao
 import com.geanbrandao.br.billbuddy.domain.usecase.UseCases
 import com.geanbrandao.br.billbuddy.presentation.navigation.AppNavigator
 import kotlinx.coroutines.launch
@@ -15,31 +16,32 @@ class BillsViewModel(
     private val appNavigator: AppNavigator,
     private val state: SavedStateHandle,
     private val useCases: UseCases,
+    private val appDao: AppDao,
 ) : ViewModel() {
 
     val uiState = state.getStateFlow(key = KEY_UI_STATE, BillsUiState())
 
-//    init {
-//        getXPTO()
-//    }
-/*
+    init {
+        getXPTO()
+    }
+
     fun getXPTO() {
         viewModelScope.launch {
-            val result = appDao.getUsersWithItemsAndDividedValues()
+            val result = appDao.getUsersWithItemsAndDividedValues(2)
             println(result)
-            result.sortedBy { it.userId }.forEach { userWithItems ->
-                val userName = userWithItems.userName
-                val value = userWithItems.value
-                val item =  userWithItems.itemName
-                println("User: $userName, $item custou: $value")
-            }
-            val listByUser = result.groupBy { it.userId }
-            listByUser.forEach { userId: Long, u: List<UserWithItemDividedValue> ->
-                val sum = u.sumOf { it.value.toDouble() }
-                val value = String.format("%.2f", sum)
-                println("User: ${u[0].userName} gastou $value nos seguintes items: ")
-                println(u.joinToString { it.itemName })
-            }
+//            result.sortedBy { it.userId }.forEach { userWithItems ->
+//                val userName = userWithItems.userName
+//                val value = userWithItems.value
+//                val item =  userWithItems.itemName
+//                println("User: $userName, $item custou: $value")
+//            }
+//            val listByUser = result.groupBy { it.userId }
+//            listByUser.forEach { userId: Long, u: List<UserWithItemDividedValue> ->
+//                val sum = u.sumOf { it.value.toDouble() }
+//                val value = String.format("%.2f", sum)
+//                println("User: ${u[0].userName} gastou $value nos seguintes items: ")
+//                println(u.joinToString { it.itemName })
+//            }
 
             // create one bill
 //            val billSchemaVersion2Id = appDao.insertBill(
@@ -97,7 +99,49 @@ class BillsViewModel(
 //                    billId = billSchemaVersion2Id,
 //                )
 //            )
+
+//            val costelaId = appDao.insertItem(
+//                ItemEntity(
+//                    itemId = 0,
+//                    name = "Costelinha",
+//                    value = 98f,
+//                    billId = 2,
+//                )
+//            )
+//
+//            val caipirinhaId = appDao.insertItem(
+//                ItemEntity(
+//                    itemId = 0,
+//                    name = "Caipirinha",
+//                    value = 18f,
+//                    billId = 2,
+//                )
+//            )
+
 //            // create cross ref
+            // willian e pedro dividiram a costelinha
+//            appDao.insertUserItemCrossRef(
+//                UserItemCrossRef(
+//                    userId = 2,
+//                    itemId = costelaId,
+//                    dividedValue = 49f,
+//                )
+//            )
+//            appDao.insertUserItemCrossRef(
+//                UserItemCrossRef(
+//                    userId = 3,
+//                    itemId = costelaId,
+//                    dividedValue = 49f,
+//                )
+//            )
+//            // roberta consumiu a caipirinha sozinha
+//            appDao.insertUserItemCrossRef(
+//                UserItemCrossRef(
+//                    userId = 1,
+//                    itemId = caipirinhaId,
+//                    dividedValue = 18f,
+//                )
+//            )
 //            // Willian consumiu a coca sozinho
 //            appDao.insertUserItemCrossRef(
 //                UserItemCrossRef(
@@ -145,7 +189,6 @@ class BillsViewModel(
 //            )
         }
     }
-*/
 
     fun getBills() {
         viewModelScope.launch {

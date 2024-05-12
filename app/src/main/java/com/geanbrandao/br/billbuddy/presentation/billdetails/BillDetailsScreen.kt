@@ -126,7 +126,7 @@ private fun BillDetailsView(
                 )
             }
             FloatingActionButton(
-                onClick = { onNavigationIntent(NavigateToCreateItem(billId = -1)) },
+                onClick = { onNavigationIntent(NavigateToCreateItem(billId = uiState.billId)) },
                 modifier = Modifier
                     .align(alignment = Alignment.BottomEnd)
                     .padding(end = PaddingTwo, bottom = PaddingThree)

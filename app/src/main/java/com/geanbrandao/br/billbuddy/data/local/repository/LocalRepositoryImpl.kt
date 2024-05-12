@@ -3,6 +3,8 @@ package com.geanbrandao.br.billbuddy.data.local.repository
 import com.geanbrandao.br.billbuddy.data.local.dao.AppDao
 import com.geanbrandao.br.billbuddy.data.local.entity.BillEntity
 import com.geanbrandao.br.billbuddy.data.local.entity.ItemEntity
+import com.geanbrandao.br.billbuddy.data.local.entity.UserEntity
+import com.geanbrandao.br.billbuddy.data.local.entity.UserItemCrossRef
 import com.geanbrandao.br.billbuddy.data.local.entity.UserWithItemDividedValue
 import com.geanbrandao.br.billbuddy.domain.repository.LocalRepository
 import org.koin.core.annotation.Single
@@ -14,6 +16,14 @@ class LocalRepositoryImpl(
 
     override suspend fun createBill(bill: BillEntity): Long {
         return dao.insertBill(bill)
+    }
+
+    override suspend fun createItem(item: ItemEntity): Long {
+        return dao.insertItem(item)
+    }
+
+    override suspend fun createItemCrossRef(crossRef: UserItemCrossRef) {
+        dao.insertUserItemCrossRef(crossRef)
     }
 
     override suspend fun getBills(): List<BillEntity> {
@@ -30,5 +40,9 @@ class LocalRepositoryImpl(
 
     override suspend fun getBill(billId: Long): BillEntity {
         return dao.getBill(billId = billId)
+    }
+
+    override suspend fun getPersons(billId: Long): List<UserEntity> {
+        return dao.getUsers(billId = billId)
     }
 }

@@ -57,7 +57,7 @@ private fun ConfirmationDialogView(
             text = {
                 Text(
                     text = "Todas os dados e pessoas dessa conta serão removidos.",
-                    style = MaterialTheme.typography.bodyMedium,
+//                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         )

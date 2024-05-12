@@ -35,7 +35,7 @@ interface AppDao {
     suspend fun getBill(billId: Long): BillEntity
 
     @Query("SELECT * FROM users WHERE billId = :billId")
-    suspend fun getUsers(billId: Int): List<UserEntity>
+    suspend fun getUsers(billId: Long): List<UserEntity>
 
     @Query("SELECT * FROM items WHERE billId = :billId")
     suspend fun getItems(billId: Long): List<ItemEntity>

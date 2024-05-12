@@ -29,7 +29,7 @@ import androidx.room.Relation
         Index("itemId"),
     ],
 )
-data class UserItemCrossRef(
+data class UserItemCrossRef( //todo faltou entity no nome
     val userId: Long,
     val itemId: Long,
     val dividedValue: Float,

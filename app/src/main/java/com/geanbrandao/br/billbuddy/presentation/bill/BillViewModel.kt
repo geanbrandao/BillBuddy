@@ -3,6 +3,8 @@ package com.geanbrandao.br.billbuddy.presentation.bill
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.geanbrandao.br.billbuddy.domain.usecase.UseCases
+import com.geanbrandao.br.billbuddy.presentation.bill.BillNavigationIntent.NavigateToBillDetails
 import com.geanbrandao.br.billbuddy.presentation.navigation.AppNavigator
 import com.geanbrandao.br.billbuddy.presentation.navigation.Screen
 import kotlinx.coroutines.launch
@@ -14,6 +16,7 @@ private const val KEY_UI_STATE = "keyBillUiState"
 class BillViewModel(
     private val appNavigator: AppNavigator,
     private val state: SavedStateHandle,
+    private val useCases: UseCases,
 ) : ViewModel() {
 
     val uiState = state.getStateFlow(key = KEY_UI_STATE, initialValue = BillUiState())
@@ -21,7 +24,7 @@ class BillViewModel(
     fun handleNavigation(intent: BillNavigationIntent) {
         viewModelScope.launch {
             when (intent) {
-                is BillNavigationIntent.NavigateToBillDetails -> {
+                is NavigateToBillDetails -> {
                     appNavigator.navigateTo(
                         route = intent.route,
                         popUpToRoute = Screen.Bill.route,
@@ -50,6 +53,8 @@ class BillViewModel(
                 is BillIntent.OnRemovePerson -> {
                     removePersonFromList(intent.value)
                 }
+
+                BillIntent.OnCreateBill -> { createBill() }
             }
         }
     }
@@ -76,5 +81,17 @@ class BillViewModel(
 
     private fun updateWarningMessage(value: String) {
         state[KEY_UI_STATE] = uiState.value.copy(warningMessage = value)
+    }
+
+    private fun createBill() {
+        viewModelScope.launch {
+//            useCases.createBillUseCase(BillModel(name = uiState.value.billName))
+//                .catch {
+//                    // todo lidar com possíveis erros
+//                }.collect { billId: Long ->
+//                    handleNavigation(intent = NavigateToBillDetails(id = billId.toInt()))
+//                }
+
+        }
     }
 }

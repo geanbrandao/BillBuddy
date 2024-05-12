@@ -7,9 +7,9 @@ sealed class BillDetailsNavigationIntent(
 ) {
 
     data object NavigateBack : BillDetailsNavigationIntent("")
-    data class NavigateToCloseBill(val billId: Int) :
+    data class NavigateToCloseBill(val billId: Long) :
         BillDetailsNavigationIntent(Screen.CloseBill.route)
 
-    data class NavigateToCreateItem(val billId: Int) :
-        BillDetailsNavigationIntent(Screen.CreateItem.route)
+    data class NavigateToCreateItem(val billId: Long) :
+        BillDetailsNavigationIntent(Screen.CreateItem.route.replace("{billId}", billId.toString()))
 }

@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.geanbrandao.br.billbuddy.presentation.bill.BillIntent.OnAddNewPerson
 import com.geanbrandao.br.billbuddy.presentation.bill.BillIntent.OnBillNameChange
+import com.geanbrandao.br.billbuddy.presentation.bill.BillIntent.OnCreateBill
 import com.geanbrandao.br.billbuddy.presentation.bill.BillIntent.OnPersonNameChange
 import com.geanbrandao.br.billbuddy.presentation.bill.BillIntent.OnRemovePerson
-import com.geanbrandao.br.billbuddy.presentation.bill.BillNavigationIntent.NavigateToBillDetails
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingFour
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
@@ -79,7 +79,7 @@ private fun BillView(
             )
             Button(
                 onClick = {
-                    onNavigationIntent(NavigateToBillDetails(-1))
+                    onBillIntent(OnCreateBill)
                 },
                 enabled = uiState.isEnabled,
                 modifier = Modifier

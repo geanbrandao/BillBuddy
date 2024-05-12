@@ -25,6 +25,7 @@ class BillDetailsViewModel(
     val uiState = state.getStateFlow(key = KEY_UI_STATE, BillDetailsUiState())
 
     fun getBillDetails() {
+        state[KEY_UI_STATE] = uiState.value.copy(billId = billId.toLong())
         getBillDetailsItems()
         getTotalBill()
         getPersonsSpent()

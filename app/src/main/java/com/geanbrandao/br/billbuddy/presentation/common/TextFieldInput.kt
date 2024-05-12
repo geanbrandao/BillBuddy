@@ -24,6 +24,7 @@ fun TextFieldInput(
     leadingIcon: Painter,
     onTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    prefix: String? = null,
     trailingIcon: Painter? = null,
     trailingIconContentDescription: String? = null,
     onTrailingIconClicked: () -> Unit = {},
@@ -37,6 +38,7 @@ fun TextFieldInput(
         text = text,
         label = label,
         leadingIcon = leadingIcon,
+        prefix = prefix,
         trailingIcon = trailingIcon,
         trailingIconContentDescription = trailingIconContentDescription,
         onTrailingIconClicked = onTrailingIconClicked,
@@ -51,6 +53,7 @@ fun TextFieldInputView(
     text: String = "1000",
     label: String = "",
     leadingIcon: Painter = painterResource(id = R.drawable.ic_text),
+    prefix: String? = null,
     trailingIcon: Painter? = null,
     trailingIconContentDescription: String? = null,
     onTrailingIconClicked: () -> Unit = {},
@@ -67,7 +70,9 @@ fun TextFieldInputView(
         modifier = modifier,
         singleLine = true,
         label = { Text(text = label) },
-//        prefix = { Text(text = "R$") }, // todo: adicionar prefixo
+        prefix = prefix?.let {
+            { Text(text = it) }
+        },
         leadingIcon = {
             Icon(
                 painter = leadingIcon,

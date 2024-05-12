@@ -10,4 +10,7 @@ data class UseCases(
     val getTotalBillUseCase: GetTotalBillUseCase,
     val getPersonsSpentUseCase: GetPersonsSpentUseCase,
     val getBillNameUseCase: GetBillNameUseCase,
+    val getPersonsUseCase: GetPersonsUseCase,
+    val formatStringValueAsMoneyUseCase: FormatStringValueAsMoneyUseCase,
+    val createItemUseCase: CreateItemUseCase,
 )
