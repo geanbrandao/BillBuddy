@@ -247,11 +247,6 @@ private fun ItemDivideByPreview() {
     }
 }
 
-data class TempPersonUserModel(
-    val name: String,
-    val isChecked: Boolean,
-)
-
 fun getListPerson() = listOf(
     PersonModel(id = 1, name = "João", isChecked = false),
     PersonModel(id = 2, name = "Pedro", isChecked = false),

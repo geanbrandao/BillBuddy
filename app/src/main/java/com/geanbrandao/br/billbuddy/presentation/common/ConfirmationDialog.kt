@@ -29,7 +29,7 @@ fun ConfirmationDialog(
 @Composable
 private fun ConfirmationDialogView(
     isVisible: Boolean = true,
-    title: String = "",
+    title: String = "", // todo arrumar o título
     message: String = "",
     onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {},

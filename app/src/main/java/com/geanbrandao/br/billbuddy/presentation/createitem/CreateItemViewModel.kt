@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geanbrandao.br.billbuddy.domain.usecase.UseCases
 import com.geanbrandao.br.billbuddy.presentation.navigation.AppNavigator
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
@@ -27,9 +28,12 @@ class CreateItemViewModel(
 
     private fun getPersons() {
         viewModelScope.launch {
-            useCases.getPersonsUseCase(billId = billId.toLong()).collect {
-                state[KEY_UI_STATE] = uiState.value.copy(persons = it)
-            }
+            useCases.getPersonsUseCase(billId = billId.toLong())
+                .catch {
+                    // todo lidar com possíveis erros
+                }.collect {
+                    state[KEY_UI_STATE] = uiState.value.copy(persons = it)
+                }
         }
     }
 
@@ -49,6 +53,7 @@ class CreateItemViewModel(
                 CreateItemIntent.OnCreateItem -> {
                     saveItem()
                 }
+
                 CreateItemIntent.OnDivideByAll -> {
                     onDivideByAll()
                 }
@@ -70,9 +75,12 @@ class CreateItemViewModel(
 
     private fun saveItem() {
         viewModelScope.launch {
-            useCases.createItemUseCase(uiState.value.resume).collect {
-                appNavigator.navigateBack()
-            }
+            useCases.createItemUseCase(uiState.value.resume)
+                .catch {
+                    // todo lidar com possíveis erros
+                }.collect {
+                    appNavigator.navigateBack()
+                }
         }
     }
 
@@ -100,9 +108,12 @@ class CreateItemViewModel(
 
     private fun updateValue(text: String) {
         viewModelScope.launch {
-            useCases.formatStringValueAsMoneyUseCase(text).collect {
-                state[KEY_UI_STATE] = uiState.value.copy(value = it)
-            }
+            useCases.formatStringValueAsMoneyUseCase(text)
+                .catch {
+                    // todo lidar com possíveis erros
+                }.collect {
+                    state[KEY_UI_STATE] = uiState.value.copy(value = it)
+                }
         }
     }
 }
