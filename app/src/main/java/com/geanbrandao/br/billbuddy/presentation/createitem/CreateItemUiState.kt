@@ -14,6 +14,7 @@ data class CreateItemUiState(
     val name: String = "",
     val value: String = ZERO_MONEY,
     val persons: List<PersonModel> = listOf(),
+    val isConfirmationDialogOpen: Boolean = false,
 ) : Parcelable {
     val isEnabled: Boolean
         get() = isValidName() && isValidValue() && isValidPersons()

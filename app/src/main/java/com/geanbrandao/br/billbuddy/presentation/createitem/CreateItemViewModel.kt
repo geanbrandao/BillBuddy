@@ -69,6 +69,10 @@ class CreateItemViewModel(
                 is CreateItemIntent.OnValueChange -> {
                     updateValue(intent.value)
                 }
+
+                is CreateItemIntent.OnConfirmationDialog -> {
+                    state[KEY_UI_STATE] = uiState.value.copy(isConfirmationDialogOpen = intent.isOpen)
+                }
             }
         }
     }

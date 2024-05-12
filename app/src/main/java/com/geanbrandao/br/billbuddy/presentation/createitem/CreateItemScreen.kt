@@ -15,13 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.geanbrandao.br.billbuddy.presentation.createitem.CreateItemIntent.OnConfirmationDialog
 import com.geanbrandao.br.billbuddy.presentation.createitem.CreateItemIntent.OnCreateItem
 import com.geanbrandao.br.billbuddy.presentation.createitem.CreateItemIntent.OnNameChange
 import com.geanbrandao.br.billbuddy.presentation.createitem.CreateItemIntent.OnPersonChecked
@@ -64,7 +63,7 @@ private fun CreateItemView(
     onCreateItemIntent: (CreateItemIntent) -> Unit = {},
 ) {
     val scrollableState = rememberScrollState()
-    val isConfirmationDialogVisible = remember { mutableStateOf(false) }
+
     Surface {
         Column(
             modifier = modifier
@@ -100,7 +99,9 @@ private fun CreateItemView(
             )
             Spacer(modifier = Modifier.weight(1f))
             Button(
-                onClick = { isConfirmationDialogVisible.value = true },
+                onClick = {
+                    onCreateItemIntent(OnConfirmationDialog(isOpen = true))
+                },
                 enabled = uiState.isEnabled,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,12 +109,14 @@ private fun CreateItemView(
             ) {
                 Text(text = "Salvar")
             }
-            if (isConfirmationDialogVisible.value) {
+            if (uiState.isConfirmationDialogOpen) {
                 ResumeDialog(
                     resume = uiState.resume,
-                    onDismissRequest = { isConfirmationDialogVisible.value = false },
+                    onDismissRequest = {
+                        onCreateItemIntent(OnConfirmationDialog(isOpen = false))
+                    },
                     onConfirm = {
-                        isConfirmationDialogVisible.value = false
+                        onCreateItemIntent(OnConfirmationDialog(isOpen = false))
                         onCreateItemIntent(OnCreateItem)
                     }
                 )

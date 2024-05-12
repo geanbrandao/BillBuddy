@@ -6,4 +6,5 @@ sealed class CreateItemIntent {
     data class OnPersonChecked(val isChecked: Boolean, val id: Long) : CreateItemIntent()
     data object OnDivideByAll : CreateItemIntent()
     data object OnCreateItem : CreateItemIntent()
+    data class OnConfirmationDialog(val isOpen: Boolean) : CreateItemIntent()
 }
