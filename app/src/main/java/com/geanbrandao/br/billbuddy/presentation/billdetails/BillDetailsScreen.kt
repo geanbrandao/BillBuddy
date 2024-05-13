@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -38,7 +39,7 @@ import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingFive
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import org.koin.androidx.compose.koinViewModel
 
@@ -59,6 +60,7 @@ fun BillDetailsScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BillDetailsView(
     modifier: Modifier = Modifier,
@@ -67,13 +69,14 @@ private fun BillDetailsView(
 ) {
     val listState = rememberLazyListState()
     val isConfirmationDialogVisible = remember { mutableStateOf(false) }
-    val isScrollingUp = remember {  mutableStateOf(false) }
+    val isTopBarExpanded = remember {  mutableStateOf(true) }
+
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
-            .map { index -> index > 2 }
-            .distinctUntilChanged()
+            .map { index -> index > 0 }
+            .filter { it }
             .collect {
-                isScrollingUp.value = it
+                isTopBarExpanded.value = it.not()
             }
     }
 
@@ -83,40 +86,38 @@ private fun BillDetailsView(
                 modifier = modifier.fillMaxSize()
             ) {
                 TopAppBarBillDetails(
-                    isVisible = isScrollingUp.value.not(),
+                    isExpanded = isTopBarExpanded.value,
                     billName = uiState.billName,
                     uiState.totalValueFormatted,
                     uiState.spentByPerson,
                     onArrowBackClicked = { onNavigationIntent(NavigateBack) },
                     onEditClicked = {},
-                    onCloseBillClicked = { onNavigationIntent(NavigateToCloseBill(billId = -1)
-                    )},
+                    onExpandClicked = { isTopBarExpanded.value = true },
+                    onCloseBillClicked = { onNavigationIntent(NavigateToCloseBill(billId = -1))},
                 )
-
                 LazyColumn(
                     state = listState,
                     verticalArrangement = Arrangement.spacedBy(PaddingTwo),
                     contentPadding = PaddingValues(all = PaddingTwo),
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    items(
-                        items = uiState.items,
-                        key = {
-                            it.itemId
+                        items(
+                            items = uiState.items,
+                            key = {
+                                it.itemId
+                            }
+                        ) { item: ConsumedItemModel ->
+                            BillItem(
+                                onRemoveClicked = {
+                                    isConfirmationDialogVisible.value = true
+                                },
+                                item = item,
+                            )
                         }
-                    ) { item: ConsumedItemModel ->
-                        BillItem(
-                            onRemoveClicked = {
-                                isConfirmationDialogVisible.value = true
-                            },
-                            item = item,
-                        )
+                        item {
+                            Spacer(modifier = Modifier.size(PaddingFive))
+                        }
                     }
-                    item {
-                        Spacer(modifier = Modifier.size(PaddingFive))
-                    }
-                }
-                
                 ConfirmationDialog(
                     isVisible = isConfirmationDialogVisible.value,
                     title = "Deseja excluir esse item?",

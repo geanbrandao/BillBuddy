@@ -1,6 +1,7 @@
 package com.geanbrandao.br.billbuddy.presentation.common
 
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -169,10 +170,11 @@ class RevealState constructor(
 
     internal val anchoredDraggableState = AnchoredDraggableState(
         initialValue = initialValue,
-        animationSpec = animationSpec,
-        confirmValueChange = confirmValueChange,
         positionalThreshold = positionalThreshold,
         velocityThreshold = velocityThreshold,
+        snapAnimationSpec = animationSpec,
+        decayAnimationSpec = exponentialDecay(),
+        confirmValueChange = confirmValueChange,
     )
 
     internal val offset: Float get() = anchoredDraggableState.offset
