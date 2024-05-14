@@ -23,8 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.geanbrandao.br.billbuddy.domain.model.BillModel
-import com.geanbrandao.br.billbuddy.presentation.bills.BillsNavigationIntent.NavigateToBill
-import com.geanbrandao.br.billbuddy.presentation.bills.BillsNavigationIntent.NavigateToBillDetails
+import com.geanbrandao.br.billbuddy.presentation.bills.components.BillItem
+import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent
+import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent.NavigateToBill
+import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent.NavigateToBillDetails
+import com.geanbrandao.br.billbuddy.presentation.bills.state.BillsUiState
 import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne

@@ -4,7 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geanbrandao.br.billbuddy.domain.usecase.UseCases
-import com.geanbrandao.br.billbuddy.presentation.navigation.AppNavigator
+import com.geanbrandao.br.billbuddy.navigation.AppNavigator
+import com.geanbrandao.br.billbuddy.presentation.createitem.intents.CreateItemIntent
+import com.geanbrandao.br.billbuddy.presentation.createitem.intents.CreateItemNavigationIntent
+import com.geanbrandao.br.billbuddy.presentation.createitem.state.CreateItemUiState
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel

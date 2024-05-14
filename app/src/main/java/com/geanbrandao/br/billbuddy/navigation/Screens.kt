@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.navigation
+package com.geanbrandao.br.billbuddy.navigation
 
 import androidx.annotation.StringRes
 import com.geanbrandao.br.billbuddy.R

@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.navigation
+package com.geanbrandao.br.billbuddy.navigation
 
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel

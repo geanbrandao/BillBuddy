@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geanbrandao.br.billbuddy.data.local.dao.AppDao
 import com.geanbrandao.br.billbuddy.domain.usecase.UseCases
-import com.geanbrandao.br.billbuddy.presentation.navigation.AppNavigator
+import com.geanbrandao.br.billbuddy.navigation.AppNavigator
+import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent
+import com.geanbrandao.br.billbuddy.presentation.bills.state.BillsUiState
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 

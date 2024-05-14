@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.billdetails
+package com.geanbrandao.br.billbuddy.presentation.billdetails.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement

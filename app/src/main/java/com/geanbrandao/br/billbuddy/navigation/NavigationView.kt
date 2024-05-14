@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.navigation
+package com.geanbrandao.br.billbuddy.navigation
 
 import android.app.Activity
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.bill
+package com.geanbrandao.br.billbuddy.presentation.bill.intents
 
 sealed class BillIntent {
     data class OnBillNameChange(val value: String) : BillIntent()

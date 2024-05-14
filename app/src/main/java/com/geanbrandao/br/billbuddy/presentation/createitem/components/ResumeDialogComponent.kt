@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.createitem
+package com.geanbrandao.br.billbuddy.presentation.createitem.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

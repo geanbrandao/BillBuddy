@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.createitem
+package com.geanbrandao.br.billbuddy.presentation.createitem.intents
 
 sealed class CreateItemIntent {
     data class OnNameChange(val value: String) : CreateItemIntent()

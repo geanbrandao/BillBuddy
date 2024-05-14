@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.billdetails
+package com.geanbrandao.br.billbuddy.presentation.billdetails.state
 
 import android.os.Parcelable
 import com.geanbrandao.br.billbuddy.domain.model.ConsumedItemModel

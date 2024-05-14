@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.bill
+package com.geanbrandao.br.billbuddy.presentation.bill.state
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

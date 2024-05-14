@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.createitem
+package com.geanbrandao.br.billbuddy.presentation.createitem.state
 
 import android.os.Parcelable
 import com.geanbrandao.br.billbuddy.domain.model.CreateItemModel

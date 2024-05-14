@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.billdetails
+package com.geanbrandao.br.billbuddy.presentation.billdetails.intents
 
 
 sealed class BillDetailsIntent {

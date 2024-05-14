@@ -17,9 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.geanbrandao.br.billbuddy.navigation.NavigationView
+import com.geanbrandao.br.billbuddy.navigation.Screen
 import com.geanbrandao.br.billbuddy.presentation.common.CustomTopAppBar
-import com.geanbrandao.br.billbuddy.presentation.navigation.NavigationView
-import com.geanbrandao.br.billbuddy.presentation.navigation.Screen
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 
 class MainActivity : ComponentActivity() {

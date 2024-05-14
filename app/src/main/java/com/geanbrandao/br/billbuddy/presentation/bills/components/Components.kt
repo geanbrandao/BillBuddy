@@ -1,4 +1,4 @@
-package com.geanbrandao.br.billbuddy.presentation.bills
+package com.geanbrandao.br.billbuddy.presentation.bills.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

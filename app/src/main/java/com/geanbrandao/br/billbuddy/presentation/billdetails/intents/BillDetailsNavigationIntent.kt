@@ -1,6 +1,6 @@
-package com.geanbrandao.br.billbuddy.presentation.billdetails
+package com.geanbrandao.br.billbuddy.presentation.billdetails.intents
 
-import com.geanbrandao.br.billbuddy.presentation.navigation.Screen
+import com.geanbrandao.br.billbuddy.navigation.Screen
 
 sealed class BillDetailsNavigationIntent(
     val route: String,
