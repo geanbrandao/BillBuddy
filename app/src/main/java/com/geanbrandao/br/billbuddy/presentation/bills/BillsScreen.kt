@@ -98,8 +98,8 @@ private fun BillsView(
         }
         ConfirmationDialog(
             isVisible = isVisible.value,
-            title = "",
-            message = "",
+            title = "Deseja excluir essa conta?",
+            message = "Todas os dados e pessoas dessa conta serão removidos. Essa ação não poderá ser desfeita.",
             onDismiss = { isVisible.value = false },
             onConfirm = { isVisible.value = false },
         )

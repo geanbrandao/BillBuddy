@@ -15,4 +15,5 @@ interface LocalRepository {
     suspend fun getItemsDividedValue(billId: Long): List<UserWithItemDividedValue>
     suspend fun getBill(billId: Long): BillEntity
     suspend fun getPersons(billId: Long): List<UserEntity>
+    suspend fun removeItem(itemId: Long?)
 }

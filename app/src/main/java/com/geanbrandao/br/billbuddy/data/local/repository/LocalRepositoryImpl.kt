@@ -45,4 +45,8 @@ class LocalRepositoryImpl(
     override suspend fun getPersons(billId: Long): List<UserEntity> {
         return dao.getUsers(billId = billId)
     }
+
+    override suspend fun removeItem(itemId: Long?) {
+        return dao.removeItem(itemId = itemId)
+    }
 }

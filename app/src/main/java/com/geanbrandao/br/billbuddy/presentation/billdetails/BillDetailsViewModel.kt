@@ -8,6 +8,7 @@ import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsNavigati
 import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsNavigationIntent.NavigateToCloseBill
 import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsNavigationIntent.NavigateToCreateItem
 import com.geanbrandao.br.billbuddy.presentation.navigation.AppNavigator
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
@@ -34,32 +35,72 @@ class BillDetailsViewModel(
 
     private fun getBillDetailsItems() {
         viewModelScope.launch {
-            useCases.getConsumedItemsUseCase(billId = billId.toLong()).collect {
-                state[KEY_UI_STATE] = uiState.value.copy(items = it)
-            }
+            useCases.getConsumedItemsUseCase(billId = billId.toLong())
+                .catch {
+                    // todo lidar com possíveis erros
+                }.collect {
+                    state[KEY_UI_STATE] = uiState.value.copy(items = it)
+                }
         }
     }
 
     private fun getTotalBill() {
         viewModelScope.launch {
-            useCases.getTotalBillUseCase(billId = billId.toLong()).collect {
-                state[KEY_UI_STATE] = uiState.value.copy(totalValue = it)
-            }
+            useCases.getTotalBillUseCase(billId = billId.toLong())
+                .catch {
+                    // todo lidar com possíveis erros
+                }.collect {
+                    state[KEY_UI_STATE] = uiState.value.copy(totalValue = it)
+                }
         }
     }
 
     private fun getBillName() {
         viewModelScope.launch {
-            useCases.getBillNameUseCase(billId = billId.toLong()).collect {
-                state[KEY_UI_STATE] = uiState.value.copy(billName = it)
-            }
+            useCases.getBillNameUseCase(billId = billId.toLong())
+                .catch {
+                    // todo lidar com possíveis erros
+                }.collect {
+                    state[KEY_UI_STATE] = uiState.value.copy(billName = it)
+                }
         }
     }
 
     private fun getPersonsSpent() {
         viewModelScope.launch {
-            useCases.getPersonsSpentUseCase(billId = billId.toLong()).collect {
-                state[KEY_UI_STATE] = uiState.value.copy(spentByPerson = it)
+            useCases.getPersonsSpentUseCase(billId = billId.toLong())
+                .catch {
+                    // todo lidar com possíveis erros
+                }.collect {
+                    state[KEY_UI_STATE] = uiState.value.copy(spentByPerson = it)
+                }
+        }
+    }
+
+    private fun removeItem(itemId: Long?) {
+        viewModelScope.launch {
+            useCases.removeItemUseCase(itemId = itemId)
+                .catch {
+                    // todo lidar com possíveis erros
+                }.collect {
+                    getBillDetails()
+                }
+        }
+    }
+
+    fun handleIntent(intent: BillDetailsIntent) {
+        viewModelScope.launch {
+            when (intent) {
+                is BillDetailsIntent.OnConfirmationDialogRemoveItemPositiveButtonClicked -> {
+                    removeItem(intent.itemId)
+                }
+
+                is BillDetailsIntent.OnConfirmationDialogRemoveItem -> {
+                    state[KEY_UI_STATE] = uiState.value.copy(
+                        isConfirmationDialogOpen = intent.isOpen,
+                        idItemToRemove = intent.itemId
+                    )
+                }
             }
         }
     }
@@ -70,14 +111,15 @@ class BillDetailsViewModel(
                 NavigateBack -> {
                     appNavigator.navigateBack()
                 }
+
                 is NavigateToCloseBill -> {
                     appNavigator.navigateTo(route = intent.route)
                 }
+
                 is NavigateToCreateItem -> {
                     appNavigator.navigateTo(route = intent.route)
                 }
             }
         }
     }
-
 }

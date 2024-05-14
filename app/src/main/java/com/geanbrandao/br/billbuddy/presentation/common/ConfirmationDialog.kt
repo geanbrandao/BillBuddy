@@ -50,13 +50,13 @@ private fun ConfirmationDialogView(
             },
             title = {
                 Text(
-                    text = "Deseja excluir essa conta?",
+                    text = title,
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
             text = {
                 Text(
-                    text = "Todas os dados e pessoas dessa conta serão removidos.",
+                    text = message,
 //                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
@@ -69,6 +69,9 @@ private fun ConfirmationDialogView(
 @Composable
 private fun ConfirmationDialogPreview() {
     BillBuddyTheme {
-        ConfirmationDialogView()
+        ConfirmationDialogView(
+            title = "Deseja excluir esse item?",
+            message = "Essa ação não pode ser desfeita",
+        )
     }
 }

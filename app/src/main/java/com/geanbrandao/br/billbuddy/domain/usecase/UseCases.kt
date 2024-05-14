@@ -13,4 +13,5 @@ data class UseCases(
     val getPersonsUseCase: GetPersonsUseCase,
     val formatStringValueAsMoneyUseCase: FormatStringValueAsMoneyUseCase,
     val createItemUseCase: CreateItemUseCase,
+    val removeItemUseCase: RemoveItemUseCase,
 )

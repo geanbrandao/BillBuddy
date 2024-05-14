@@ -12,7 +12,9 @@ data class BillDetailsUiState(
     val billName: String = "",
     val totalValue: Float = 0.0f,
     val items: List<ConsumedItemModel> = listOf(),
-    val spentByPerson: List<SpentByPersonModel> = listOf()
+    val spentByPerson: List<SpentByPersonModel> = listOf(),
+    val isConfirmationDialogOpen: Boolean = false,
+    val idItemToRemove: Long? = null,
 ) : Parcelable {
     val totalValueFormatted: String
         get() = totalValue.formatToBrl()
