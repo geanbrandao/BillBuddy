@@ -26,6 +26,10 @@ class LocalRepositoryImpl(
         dao.insertUserItemCrossRef(crossRef)
     }
 
+    override suspend fun createPerson(user: UserEntity): Long {
+        return dao.insertUser(user =  user)
+    }
+
     override suspend fun getBills(): List<BillEntity> {
         return dao.getBills()
     }
@@ -48,5 +52,9 @@ class LocalRepositoryImpl(
 
     override suspend fun removeItem(itemId: Long?) {
         return dao.removeItem(itemId = itemId)
+    }
+
+    override suspend fun removeBill(billId: Long?) {
+        return dao.removeBill(billId = billId)
     }
 }

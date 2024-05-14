@@ -9,6 +9,7 @@ val PaddingThree = 24.dp
 val PaddingFour = 32.dp
 val PaddingFive = 48.dp
 val PaddingSix = 64.dp
+val PaddingSeven = 96.dp
 
 val CornerSizeHalf = 4.dp
 val CornerSizeOne = 8.dp

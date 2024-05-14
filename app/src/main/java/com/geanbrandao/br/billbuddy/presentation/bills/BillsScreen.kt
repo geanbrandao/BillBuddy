@@ -15,8 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +22,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.geanbrandao.br.billbuddy.domain.model.BillModel
 import com.geanbrandao.br.billbuddy.presentation.bills.components.BillItem
+import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsIntent
+import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsIntent.OnConfirmationDialogRemoveBill
+import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsIntent.OnConfirmationDialogRemoveBillPositiveButtonClicked
 import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent
 import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent.NavigateToBill
 import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent.NavigateToBillDetails
@@ -48,6 +49,7 @@ fun BillsScreen(
     val uiState = viewModel.uiState.collectAsState()
     BillsView(
         onNavigationIntent = viewModel::handleNavigation,
+        onIntent = viewModel::handleIntent,
         uiState = uiState.value,
     )
 }
@@ -56,9 +58,9 @@ fun BillsScreen(
 private fun BillsView(
     modifier: Modifier = Modifier,
     uiState: BillsUiState = BillsUiState(),
+    onIntent: (BillsIntent) -> Unit = {},
     onNavigationIntent: (BillsNavigationIntent) -> Unit = {},
 ) {
-    val isVisible = remember { mutableStateOf(false) }
     Column(
         modifier = modifier
             .background(color = MaterialTheme.colorScheme.background)
@@ -81,7 +83,7 @@ private fun BillsView(
                     modifier = Modifier.padding(vertical = PaddingOne),
                     billItem = billItem,
                     onRemoveClicked = {
-                        isVisible.value = true
+                        onIntent(OnConfirmationDialogRemoveBill(isOpen = true, billId = billItem.id))
                     },
                     onItemClicked = {
                         onNavigationIntent(NavigateToBillDetails(id = billItem.id))
@@ -100,11 +102,16 @@ private fun BillsView(
             Text(text = "Criar conta")
         }
         ConfirmationDialog(
-            isVisible = isVisible.value,
+            isVisible = uiState.isConfirmationDialogOpen,
             title = "Deseja excluir essa conta?",
             message = "Todas os dados e pessoas dessa conta serão removidos. Essa ação não poderá ser desfeita.",
-            onDismiss = { isVisible.value = false },
-            onConfirm = { isVisible.value = false },
+            onDismiss = {
+                onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
+            },
+            onConfirm = {
+                onIntent(OnConfirmationDialogRemoveBillPositiveButtonClicked(billId = uiState.idBillToRemove))
+                onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
+            },
         )
     }
 }

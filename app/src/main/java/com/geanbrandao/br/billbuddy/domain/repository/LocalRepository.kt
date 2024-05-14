@@ -10,10 +10,12 @@ interface LocalRepository {
     suspend fun createBill(bill: BillEntity): Long
     suspend fun createItem(item: ItemEntity): Long
     suspend fun createItemCrossRef(crossRef: UserItemCrossRef)
+    suspend fun createPerson(user: UserEntity): Long
     suspend fun getBills(): List<BillEntity>
     suspend fun getItems(billId: Long): List<ItemEntity>
     suspend fun getItemsDividedValue(billId: Long): List<UserWithItemDividedValue>
     suspend fun getBill(billId: Long): BillEntity
     suspend fun getPersons(billId: Long): List<UserEntity>
     suspend fun removeItem(itemId: Long?)
+    suspend fun removeBill(billId: Long?)
 }

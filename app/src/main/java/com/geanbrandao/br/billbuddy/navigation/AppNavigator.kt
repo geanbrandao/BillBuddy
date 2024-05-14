@@ -1,5 +1,7 @@
 package com.geanbrandao.br.billbuddy.navigation
 
+import androidx.compose.material3.SnackbarDuration
+import com.geanbrandao.br.billbuddy.domain.model.SnackbarType
 import kotlinx.coroutines.channels.Channel
 
 interface AppNavigator {
@@ -16,5 +18,11 @@ interface AppNavigator {
         inclusive: Boolean = false,
         isSingleTop: Boolean = false,
     )
-    // todo adicionar funcao para exibir erros
+
+    suspend fun showSnackbar(
+        message: String,
+        type: SnackbarType = SnackbarType.WARNING,
+        actionLabel: String? = null,
+        duration: SnackbarDuration = SnackbarDuration.Short,
+    )
 }

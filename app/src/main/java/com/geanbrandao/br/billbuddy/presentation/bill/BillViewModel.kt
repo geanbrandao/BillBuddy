@@ -3,13 +3,16 @@ package com.geanbrandao.br.billbuddy.presentation.bill
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.geanbrandao.br.billbuddy.domain.model.CreateBillModel
 import com.geanbrandao.br.billbuddy.domain.usecase.UseCases
 import com.geanbrandao.br.billbuddy.navigation.AppNavigator
 import com.geanbrandao.br.billbuddy.navigation.Screen
 import com.geanbrandao.br.billbuddy.presentation.bill.intents.BillIntent
 import com.geanbrandao.br.billbuddy.presentation.bill.intents.BillNavigationIntent
 import com.geanbrandao.br.billbuddy.presentation.bill.intents.BillNavigationIntent.NavigateToBillDetails
+import com.geanbrandao.br.billbuddy.presentation.bill.intents.BillNavigationIntent.ShowWarningSnackbar
 import com.geanbrandao.br.billbuddy.presentation.bill.state.BillUiState
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
@@ -33,6 +36,10 @@ class BillViewModel(
                         popUpToRoute = Screen.Bill.route,
                         inclusive = true,
                     )
+                }
+
+                is ShowWarningSnackbar -> {
+                    appNavigator.showSnackbar(message = intent.message)
                 }
             }
         }
@@ -71,10 +78,10 @@ class BillViewModel(
         val persons = uiState.value.persons
         when {
             value.isEmpty() -> {
-                updateWarningMessage("O nome não pode ser vazio.")
+                handleNavigation(ShowWarningSnackbar(message = "O nome não pode ser vazio."))
             }
             persons.contains(value) -> {
-                updateWarningMessage("O nome '$value' já existe.")
+                handleNavigation(ShowWarningSnackbar(message = "O nome '$value' já existe."))
             }
             else -> {
                 state[KEY_UI_STATE] = uiState.value.copy(persons = persons.plus(value), personName = "")
@@ -82,19 +89,20 @@ class BillViewModel(
         }
     }
 
-    private fun updateWarningMessage(value: String) {
-        state[KEY_UI_STATE] = uiState.value.copy(warningMessage = value)
-    }
-
     private fun createBill() {
         viewModelScope.launch {
-//            useCases.createBillUseCase(BillModel(name = uiState.value.billName))
-//                .catch {
-//                    // todo lidar com possíveis erros
-//                }.collect { billId: Long ->
-//                    handleNavigation(intent = NavigateToBillDetails(id = billId.toInt()))
-//                }
+            useCases.createBillUseCase(getData())
+                .catch {
+                    // todo lidar com possíveis erros
+                }.collect { billId: Long ->
+                    handleNavigation(intent = NavigateToBillDetails(billId = billId.toInt()))
+                }
 
         }
     }
+
+    private fun getData() = CreateBillModel(
+        billName = uiState.value.billName,
+        persons = uiState.value.persons,
+    )
 }

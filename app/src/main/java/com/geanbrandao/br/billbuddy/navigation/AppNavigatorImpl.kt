@@ -1,5 +1,7 @@
 package com.geanbrandao.br.billbuddy.navigation
 
+import androidx.compose.material3.SnackbarDuration
+import com.geanbrandao.br.billbuddy.domain.model.SnackbarType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import org.koin.core.annotation.Single
@@ -32,6 +34,22 @@ class AppNavigatorImpl : AppNavigator {
                 popUpToRoute = popUpToRoute,
                 inclusive = inclusive,
                 isSingleTop = isSingleTop,
+            )
+        )
+    }
+
+    override suspend fun showSnackbar(
+        message: String,
+        type: SnackbarType,
+        actionLabel: String?,
+        duration: SnackbarDuration
+    ) {
+        navigationChannel.send(
+            NavigationIntent.ShowSnackbar(
+                message = message,
+                type = type,
+                actionLabel = actionLabel,
+                duration = duration,
             )
         )
     }

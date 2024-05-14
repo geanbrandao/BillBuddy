@@ -43,6 +43,9 @@ interface AppDao {
     @Query("DELETE FROM items WHERE itemId = :itemId")
     suspend fun removeItem(itemId: Long?)
 
+    @Query("DELETE from bills WHERE id = :billId")
+    suspend fun removeBill(billId: Long?)
+
     @Transaction
     @Query("SELECT * FROM items")
     suspend fun getItemsWithUsers(): List<ItemWithUsers>

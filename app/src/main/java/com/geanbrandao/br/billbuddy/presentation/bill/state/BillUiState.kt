@@ -8,7 +8,6 @@ data class BillUiState(
     val billName: String = "",
     val personName: String = "",
     val persons: List<String> = listOf(),
-    val warningMessage: String? = null,
 ) : Parcelable {
     val isEnabled: Boolean
         get() = isValidBillName() && isValidPersons()

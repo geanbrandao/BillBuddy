@@ -1,6 +1,6 @@
 package com.geanbrandao.br.billbuddy.domain.usecase
 
-import com.geanbrandao.br.billbuddy.data.local.entity.UserWithItemDividedValue
+import com.geanbrandao.br.billbuddy.data.local.entity.UserEntity
 import com.geanbrandao.br.billbuddy.domain.model.SpentByPersonModel
 import com.geanbrandao.br.billbuddy.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.flow
@@ -13,13 +13,16 @@ class GetPersonsSpentUseCase(
 
     operator fun invoke(billId: Long) = flow {
         val items = repository.getItemsDividedValue(billId)
+        val persons = repository.getPersons(billId)
+        val itemsGroupByPerson = items.groupBy { it.userId }
 
-        items.groupBy { it.userId }.map { item: Map.Entry<Long, List<UserWithItemDividedValue>> ->
+        persons.map { person: UserEntity ->
+            val totalSpent = itemsGroupByPerson[person.userId]?.sumOf { it.value.toDouble() }?.toFloat() ?: 0f
             SpentByPersonModel(
                 billId = billId,
-                personId = item.key,
-                name = item.value.first().userName,
-                totalSpent = item.value.sumOf { it.value.toDouble() }.toFloat(),
+                personId = person.userId,
+                name = person.name,
+                totalSpent = totalSpent,
             )
         }.sortedBy {
             it.personId

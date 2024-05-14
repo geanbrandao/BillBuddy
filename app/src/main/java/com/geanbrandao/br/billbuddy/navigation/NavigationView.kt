@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.geanbrandao.br.billbuddy.domain.model.SnackbarDataModel
 import com.geanbrandao.br.billbuddy.presentation.bill.BillScreen
 import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsScreen
 import com.geanbrandao.br.billbuddy.presentation.bills.BillsScreen
@@ -18,9 +19,10 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NavigationView(
+    navController: NavHostController,
+    onShowSnackbar: (SnackbarDataModel) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: NavigationViewModel = koinViewModel(),
-    navController: NavHostController,
 ) {
 
     val activity = (LocalContext.current as? Activity)
@@ -49,7 +51,13 @@ fun NavigationView(
                 }
 
                 is NavigationIntent.ShowSnackbar -> {
-
+                    onShowSnackbar(
+                        SnackbarDataModel(
+                            message = intent.message,
+                            type = intent.type,
+                            actionLabel = intent.actionLabel
+                        )
+                    )
                 }
             }
         }

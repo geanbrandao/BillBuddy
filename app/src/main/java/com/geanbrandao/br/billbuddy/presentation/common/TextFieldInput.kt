@@ -9,10 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.geanbrandao.br.billbuddy.R
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
@@ -63,10 +61,9 @@ fun TextFieldInputView(
         keyboardType = KeyboardType.Text,
     )
 ) {
-    val textFieldValue = TextFieldValue(text = text, selection = TextRange(text.length))
     TextField(
-        value = textFieldValue,
-        onValueChange = { onTextChange(it.text) },
+        value = text,
+        onValueChange = { onTextChange(it) },
         modifier = modifier,
         singleLine = true,
         label = { Text(text = label) },

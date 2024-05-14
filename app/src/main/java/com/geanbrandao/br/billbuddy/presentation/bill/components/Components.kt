@@ -3,11 +3,10 @@ package com.geanbrandao.br.billbuddy.presentation.bill.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -114,21 +113,23 @@ private fun PersonsListView(
     list: List<String> = listOf("Pessoa 1", "Pessoa 2", "Pessoa 3"),
     onRemoveClicked: (String) -> Unit = {},
 ) {
-    LazyColumn(
+    Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(PaddingHalf)
     ) {
-        item {
-            Text(
-                text = "Quem está dividindo a conta?",
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(vertical = PaddingTwo)
-            )
-        }
-        items(list, key = { it }) { personName: String ->
+        Text(
+            text = "Quem está dividindo a conta?",
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier
+                .padding(vertical = PaddingTwo)
+                .fillMaxWidth()
+        )
+        list.forEach { personName: String ->
             Row(
-                verticalAlignment = Alignment.Bottom,
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
                         shape = RoundedCornerShape(CornerSizeHalf),
@@ -142,7 +143,6 @@ private fun PersonsListView(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(modifier = Modifier.weight(1f))
                 Icon(
                     imageVector = Icons.Rounded.Delete,
                     tint = MaterialTheme.colorScheme.error,
@@ -177,3 +177,49 @@ private fun PersonListPreview() {
         PersonsListView()
     }
 }
+
+//@Composable
+//private fun PersonsListView(
+//    modifier: Modifier = Modifier,
+//    list: List<String> = listOf("Pessoa 1", "Pessoa 2", "Pessoa 3"),
+//    onRemoveClicked: (String) -> Unit = {},
+//) {
+//    LazyColumn(
+//        modifier = modifier,
+//        verticalArrangement = Arrangement.spacedBy(PaddingHalf)
+//    ) {
+//        item {
+//            Text(
+//                text = "Quem está dividindo a conta?",
+//                style = MaterialTheme.typography.labelLarge,
+//                modifier = Modifier.padding(vertical = PaddingTwo)
+//            )
+//        }
+//        items(list, key = { it }) { personName: String ->
+//            Row(
+//                verticalAlignment = Alignment.Bottom,
+//                modifier = Modifier
+//                    .background(
+//                        color = MaterialTheme.colorScheme.surfaceContainer,
+//                        shape = RoundedCornerShape(CornerSizeHalf),
+//                    )
+//                    .padding(PaddingOne)
+//            ) {
+//                Text(
+//                    text = personName,
+//                    style = MaterialTheme.typography.bodyLarge,
+//                    color = MaterialTheme.colorScheme.onSurface,
+//                    maxLines = 1,
+//                    overflow = TextOverflow.Ellipsis,
+//                )
+//                Spacer(modifier = Modifier.weight(1f))
+//                Icon(
+//                    imageVector = Icons.Rounded.Delete,
+//                    tint = MaterialTheme.colorScheme.error,
+//                    contentDescription = "Remover conta",
+//                    modifier = Modifier.clickable { onRemoveClicked(personName) }
+//                )
+//            }
+//        }
+//    }
+//}
