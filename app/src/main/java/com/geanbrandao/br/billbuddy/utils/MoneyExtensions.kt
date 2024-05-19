@@ -6,7 +6,5 @@ object MoneyExtensions {
 
     fun formatValueAsMoney(value: String) = "%.2f".format(value.getDigits().toDouble() / 100f)
 
-    private fun String.getDigits() = this.filter { it.isDigit() }
-
     fun String.moneyBrlToFloat() = this.getDigits().toFloat() / 100f
 }

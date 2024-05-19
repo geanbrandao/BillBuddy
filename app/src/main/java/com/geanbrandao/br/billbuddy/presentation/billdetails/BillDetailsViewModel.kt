@@ -91,7 +91,7 @@ class BillDetailsViewModel(
         }
     }
 
-    fun handleIntent(intent: BillDetailsIntent) {
+    fun     handleIntent(intent: BillDetailsIntent) {
         viewModelScope.launch {
             when (intent) {
                 is BillDetailsIntent.OnConfirmationDialogRemoveItemPositiveButtonClicked -> {

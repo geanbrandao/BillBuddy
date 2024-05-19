@@ -13,5 +13,8 @@ data class SpentByPersonModel(
 ) : Parcelable {
     val totalSpentFormatted: String
         get() = totalSpent.formatToBrl()
+
+    fun totalWithServiceTax(serviceTax: Float): String =
+        (totalSpent + (totalSpent.times(serviceTax))).formatToBrl()
 }
 

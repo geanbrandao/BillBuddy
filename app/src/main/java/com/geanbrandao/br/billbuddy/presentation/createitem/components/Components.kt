@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.geanbrandao.br.billbuddy.R
 import com.geanbrandao.br.billbuddy.domain.model.PersonModel
 import com.geanbrandao.br.billbuddy.presentation.common.TextFieldInput
+import com.geanbrandao.br.billbuddy.presentation.common.TextFieldInputFormatted
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.CheckboxRowHeight
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingFive
@@ -80,7 +81,7 @@ private fun ItemValueInputView(
     text: String = "",
     onTextChange: (String) -> Unit = {},
 ) {
-    TextFieldInput(
+    TextFieldInputFormatted(
         modifier = modifier,
         text = text,
         onTextChange = onTextChange,

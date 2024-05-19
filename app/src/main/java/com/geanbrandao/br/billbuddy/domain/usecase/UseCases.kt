@@ -15,4 +15,5 @@ data class UseCases(
     val createItemUseCase: CreateItemUseCase,
     val removeItemUseCase: RemoveItemUseCase,
     val removeBillUseCase: RemoveBillUseCase,
+    val formatStringValueAsPercentageServiceTaxUseCase: FormatStringValueAsPercentageServiceTaxUseCase,
 )

@@ -5,22 +5,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.geanbrandao.br.billbuddy.R
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
 
 @Composable
-fun TextFieldInput(
+fun TextFieldInputFormatted(
     text: String,
     label: String,
     leadingIcon: Painter,
@@ -36,7 +37,7 @@ fun TextFieldInput(
         keyboardType = KeyboardType.Text,
     )
 ) {
-    TextFieldInputView(
+    TextFieldInputFormattedView(
         modifier = modifier,
         text = text,
         label = label,
@@ -52,7 +53,7 @@ fun TextFieldInput(
 }
 
 @Composable
-fun TextFieldInputView(
+fun TextFieldInputFormattedView(
     modifier: Modifier = Modifier,
     text: String = "1000",
     label: String = "",
@@ -68,9 +69,10 @@ fun TextFieldInputView(
         keyboardType = KeyboardType.Text,
     )
 ) {
+    val textFieldValue = TextFieldValue(text = text, selection = TextRange(text.length))
     TextField(
-        value = text,
-        onValueChange = { onTextChange(it) },
+        value = textFieldValue,
+        onValueChange = { onTextChange(it.text) },
         modifier = modifier,
         singleLine = true,
         label = { Text(text = label) },
@@ -99,34 +101,20 @@ fun TextFieldInputView(
     )
 }
 
-@Composable
-fun TrailingIcon(
-    painter: Painter,
-    contentDescription: String? = null,
-    onClick: () -> Unit = {},
-) {
-    IconButton(onClick = onClick) {
-        Icon(
-            painter = painter,
-            contentDescription = contentDescription,
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
-private fun TextFieldInputPreview() {
+private fun TextFieldInputFormattedPreview() {
     BillBuddyTheme {
         Column(
             modifier = Modifier.padding(PaddingTwo),
             verticalArrangement = Arrangement.spacedBy(space = PaddingTwo),
         ) {
-            TextFieldInputView(
+            TextFieldInputFormattedView(
                 text = "10",
                 label = "Digite o texto",
                 suffix = "%",
             )
-            TextFieldInputView(
+            TextFieldInputFormattedView(
                 text = "0,00",
                 label = "Digite o texto",
                 prefix = "R$"
@@ -134,4 +122,3 @@ private fun TextFieldInputPreview() {
         }
     }
 }
-

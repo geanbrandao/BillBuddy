@@ -7,7 +7,7 @@ private const val BILLS_ROUTE = "bills"
 private const val CREATE_BILL_ROUTE = "createBill/{billId}"
 private const val BILL_DETAILS_ROUTE = "billDetails/{billId}"
 private const val CREATE_BILL_ITEM = "createBillItem/{billId}"
-private const val CLOSE_BILL_ITEM = "closeBill"
+private const val CLOSE_BILL_ITEM = "closeBill/{billId}"
 
 sealed class Screen(
     val route: String,

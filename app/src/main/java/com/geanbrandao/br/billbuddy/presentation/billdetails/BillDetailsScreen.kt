@@ -100,7 +100,7 @@ private fun BillDetailsView(
                     onArrowBackClicked = { onNavigationIntent(NavigateBack) },
                     onEditClicked = {},
                     onExpandClicked = { isTopBarExpanded.value = true },
-                    onCloseBillClicked = { onNavigationIntent(NavigateToCloseBill(billId = -1)) },
+                    onCloseBillClicked = { onNavigationIntent(NavigateToCloseBill(billId = uiState.billId)) },
                 )
                 LazyColumn(
                     state = listState,

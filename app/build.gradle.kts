@@ -14,7 +14,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.annotations)
     implementation(libs.koin.androidx.compose)
+
     ksp(libs.koin.ksp.compiler)
     // ROOM
     implementation(libs.androidx.room.runtime)
@@ -90,6 +91,8 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.junit.ktx)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

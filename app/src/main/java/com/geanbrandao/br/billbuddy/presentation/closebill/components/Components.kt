@@ -1,11 +1,13 @@
-package com.geanbrandao.br.billbuddy.presentation.closebill
+package com.geanbrandao.br.billbuddy.presentation.closebill.components
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.geanbrandao.br.billbuddy.R
-import com.geanbrandao.br.billbuddy.presentation.common.TextFieldInput
+import com.geanbrandao.br.billbuddy.presentation.common.TextFieldInputFormatted
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 
 @Composable
@@ -27,12 +29,14 @@ private fun ServiceFeeInputView(
     text: String = "",
     onTextChange: (String) -> Unit = {},
 ) {
-    TextFieldInput(
+    TextFieldInputFormatted(
         modifier = modifier,
         text = text,
-        label = "Digite o valor da taxa de serviço",
+        label = "Porcentagem da taxa de serviço",
+        suffix = "%",
         leadingIcon = painterResource(id = R.drawable.ic_number),
         onTextChange = onTextChange,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
     )
 }
 
@@ -41,7 +45,7 @@ private fun ServiceFeeInputView(
 private fun ServiceFeeInputPreview() {
     BillBuddyTheme {
         ServiceFeeInputView(
-            text = "0%",
+            text = "10",
         )
     }
 }
