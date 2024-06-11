@@ -1,10 +1,15 @@
 package com.geanbrandao.br.billbuddy.presentation.closebill
 
+import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geanbrandao.br.billbuddy.domain.usecase.UseCases
+import com.geanbrandao.br.billbuddy.navigation.AppNavigator
 import com.geanbrandao.br.billbuddy.presentation.closebill.intents.CloseBillIntent
+import com.geanbrandao.br.billbuddy.presentation.closebill.intents.CloseBillIntent.OnServiceTaxPercentageChange
+import com.geanbrandao.br.billbuddy.presentation.closebill.intents.CloseBillNavigationIntent
+import com.geanbrandao.br.billbuddy.presentation.closebill.intents.CloseBillNavigationIntent.NavigateBack
 import com.geanbrandao.br.billbuddy.presentation.closebill.state.CloseBillUiState
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -16,6 +21,7 @@ private const val KEY_UI_STATE = "keyCloseBillUiState"
 class CloseBillViewModel(
     private val state: SavedStateHandle,
     private val useCases: UseCases,
+    private val appNavigator: AppNavigator,
 ) : ViewModel() {
 
     private val billId: String = checkNotNull(state["billId"])
@@ -30,9 +36,34 @@ class CloseBillViewModel(
     fun handleIntent(intent: CloseBillIntent) {
         viewModelScope.launch {
             when (intent) {
-                is CloseBillIntent.OnServiceTaxPercentageChange -> {
+                is OnServiceTaxPercentageChange -> {
                     updateServiceTaxPercentage(intent.value)
                 }
+
+                is CloseBillIntent.OnShareBillResume -> {
+                    saveResumeImage(intent.bitmap)
+                }
+            }
+        }
+    }
+
+    fun handleNavigation(intent: CloseBillNavigationIntent) {
+        viewModelScope.launch {
+            when (intent) {
+                NavigateBack -> appNavigator.navigateBack(intent.route)
+            }
+        }
+    }
+
+    private fun saveResumeImage(bitmap: Bitmap) {
+        viewModelScope.launch {
+            useCases.saveResumeImageOnDiskUseCase(
+                bitmap = bitmap,
+                billName = uiState.value.billName
+            ).catch {
+                // todo lidar com possíveis erros
+            }.collect {
+                state[KEY_UI_STATE] = uiState.value.copy(uri = it)
             }
         }
     }
@@ -54,7 +85,7 @@ class CloseBillViewModel(
                 .catch {
                     // todo lidar com possíveis erros
                 }.collect {
-                    state[KEY_UI_STATE] = uiState.value.copy(spentByPerson = it)
+                    state[KEY_UI_STATE] = uiState.value.copy(spentByPersonList = it)
                 }
         }
     }
@@ -65,7 +96,7 @@ class CloseBillViewModel(
                 .catch {
                     // todo lidar com possíveis erros
                 }.collect { formattedValue: String ->
-                    state[KEY_UI_STATE] = uiState.value.copy(serviceTaxPercentage = formattedValue)
+                    state[KEY_UI_STATE] = uiState.value.copy(serviceFeeFormatted = formattedValue)
                 }
         }
     }

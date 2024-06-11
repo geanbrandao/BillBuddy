@@ -74,14 +74,12 @@ private fun CreateItemView(
                 .fillMaxSize()
                 .verticalScroll(scrollableState)
                 .padding(horizontal = PaddingTwo),
-            verticalArrangement = Arrangement.spacedBy(PaddingTwo)
+            verticalArrangement = Arrangement.spacedBy(space = PaddingTwo)
         ) {
             Spacer(modifier = Modifier.size(PaddingTwo))
             ItemNameInput(
                 text = uiState.name,
-                onTextChange = { text ->
-                    onCreateItemIntent(OnNameChange(text))
-                },
+                onTextChange = { text -> onCreateItemIntent(OnNameChange(text)) },
                 modifier = Modifier.fillMaxWidth()
             )
             ItemValueInput(

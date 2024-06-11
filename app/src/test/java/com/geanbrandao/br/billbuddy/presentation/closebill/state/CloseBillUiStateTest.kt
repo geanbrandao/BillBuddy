@@ -9,8 +9,8 @@ class CloseBillUiStateTest {
 
     private val uiState = CloseBillUiState(
         billId = 1,
-        serviceTaxPercentage = "10,00",
-        spentByPerson = listOf(
+        serviceFeeFormatted = "10,00",
+        spentByPersonList = listOf(
             SpentByPersonModel(
                 billId = 1,
                 personId = 1,
@@ -30,13 +30,13 @@ class CloseBillUiStateTest {
     fun `given float value then get formatted value`() {
         val expected = 0.1f
 
-        assertEquals(expected, uiState.serviceTaxPercentageNumber)
+        assertEquals(expected, uiState.serviceFee)
     }
 
     @Test
     fun `given uiState then get total spent service tax formatted`() {
         val expected = "R$ 330,00"
 
-        assertEquals(expected, uiState.totalSpentServiceTaxFormatted)
+        assertEquals(expected, uiState.totalSpentServiceFeeFormatted)
     }
 }

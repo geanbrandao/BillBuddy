@@ -147,7 +147,7 @@ private fun onDestinationHandle(
 
             Screen.CloseBill.route -> {
                 updateNavigateBack(true)
-                updateTopAppBarVisible(true)
+                updateTopAppBarVisible(false)
                 updateScreenTitle(Screen.CloseBill.title)
             }
 

@@ -23,6 +23,6 @@ class SpentByPersonModelTest {
     fun `when totalWithServiceTax then return formatted value`() {
         val expected = "R$ 110,00"
 
-        assertEquals(expected, model.totalWithServiceTax(0.1f))
+        assertEquals(expected, model.totalSpentWithServiceTaxFormatted(0.1f))
     }
 }

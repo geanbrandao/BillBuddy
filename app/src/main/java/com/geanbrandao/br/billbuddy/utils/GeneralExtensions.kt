@@ -7,6 +7,9 @@ import java.util.Locale
 @SuppressLint("DefaultLocale")
 fun Float.formatToBrl(): String = String.format("R$ %.2f", this, Locale("pt", "BR"))
 
+@SuppressLint("DefaultLocale")
+fun Float.formatPercentage(): String = String.format("%.2f %", this, Locale("pt", "BR"))
+
 fun BillStatus.getBrStatus(): String = when(this) {
     BillStatus.OPEN -> "Em aberto"
     BillStatus.CLOSED -> "Fechada"
