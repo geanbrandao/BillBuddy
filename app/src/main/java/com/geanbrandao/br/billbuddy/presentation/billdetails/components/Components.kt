@@ -28,7 +28,9 @@ import com.geanbrandao.br.billbuddy.domain.model.SpentByPersonModel
 import com.geanbrandao.br.billbuddy.presentation.common.SwipeLeft
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.CornerSizeOne
+import com.geanbrandao.br.billbuddy.ui.theme.ElevationOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingHalf
+import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
 
 @Composable
@@ -46,6 +48,7 @@ private fun PersonItemView(
 ) {
     Surface(
         modifier = modifier,
+        shadowElevation = ElevationOne,
         color = MaterialTheme.colorScheme.tertiaryContainer,
         shape = RoundedCornerShape(CornerSizeOne),
     ) {
@@ -184,11 +187,13 @@ private fun DividedByMany(item: ConsumedItemModel) {
     }
 }
 
-@Preview
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 private fun PersonItemPreview() {
     BillBuddyTheme {
-        PersonItemView()
+        Column(Modifier.padding(PaddingThree)) {
+            PersonItemView()
+        }
     }
 }
 

@@ -16,8 +16,10 @@ val CornerSizeOne = 8.dp
 
 val TopAppBarHeight = 64.dp
 
-val ElevationOne = 4.dp
+val ElevationHalf = 4.dp
+val ElevationOne = 8.dp
 
 val CheckboxRowHeight = 56.dp
 
 val BorderWidthOne = 1.dp
+val StrokeSizeAvatar = 4.dp

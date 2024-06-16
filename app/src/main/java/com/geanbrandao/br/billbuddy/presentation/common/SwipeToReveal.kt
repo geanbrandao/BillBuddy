@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.CenterEnd
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -47,6 +48,7 @@ import kotlin.math.roundToInt
 @Composable
 fun SwipeLeft(
     modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(CornerSizeOne),
     onDeleteClicked: () -> Unit,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -78,7 +80,8 @@ fun SwipeLeft(
                         }
                         onDeleteClicked()
                     },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    shape = shape,
                 )
             }
         },
@@ -132,12 +135,13 @@ fun SwipeToReveal(
 fun BackgroundSwipeLeftView(
     modifier: Modifier = Modifier,
     onDeleteClicked: () -> Unit = {},
+    shape: Shape = RoundedCornerShape(CornerSizeOne),
 ) {
     Box(
         modifier = modifier
             .background(
                 color = MaterialTheme.colorScheme.errorContainer,
-                shape = RoundedCornerShape(CornerSizeOne),
+                shape = shape,
             )
     ) {
         IconButton(

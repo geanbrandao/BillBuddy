@@ -8,6 +8,7 @@ private const val CREATE_BILL_ROUTE = "createBill/{billId}"
 private const val BILL_DETAILS_ROUTE = "billDetails/{billId}"
 private const val CREATE_BILL_ITEM = "createBillItem/{billId}"
 private const val CLOSE_BILL_ITEM = "closeBill/{billId}"
+private const val GROUPS_ROUTE = "groups"
 
 sealed class Screen(
     val route: String,
@@ -18,4 +19,5 @@ sealed class Screen(
     data object BillDetails : Screen(BILL_DETAILS_ROUTE, R.string.screen_bill_details_top_bar_title)
     data object CreateItem : Screen(CREATE_BILL_ITEM, R.string.screen_create_item_top_bar_title)
     data object CloseBill : Screen(CLOSE_BILL_ITEM, R.string.screen_close_bill_top_bar_title)
+    data object Groups : Screen(GROUPS_ROUTE, R.string.screen_groups_top_bar_title)
 }

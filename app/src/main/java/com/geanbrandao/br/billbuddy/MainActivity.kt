@@ -32,6 +32,16 @@ import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
 import kotlinx.coroutines.launch
 
+// Adicionar agrupamento na lista de encerramento de conta - Isso vai facilitar a divisão na hora do pagamento
+// no caso de um casal, normalmente um só paga
+// ---------
+// Adicionar auto complete baseado nos itens já inseridos, trazendo uma sugestão de valor para o item
+// ---------
+// Adicionar MLKit para ler e interpretar cardapios, de forma a ajudar no autocomplete
+// ---------
+// Criar tabela para gerenciar grupos de pessoas - many to many
+// Criar tela para criar grupos
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,7 +133,7 @@ private fun onDestinationHandle(
         when (destination.route) {
             Screen.Bills.route -> {
                 updateNavigateBack(false)
-                updateTopAppBarVisible(true)
+                updateTopAppBarVisible(false)
                 updateScreenTitle(Screen.Bills.title)
             }
 
@@ -149,6 +159,12 @@ private fun onDestinationHandle(
                 updateNavigateBack(true)
                 updateTopAppBarVisible(false)
                 updateScreenTitle(Screen.CloseBill.title)
+            }
+
+            Screen.Groups.route -> {
+                updateNavigateBack(true)
+                updateTopAppBarVisible(false)
+                updateScreenTitle(Screen.Groups.title)
             }
 
             else -> throw Exception("Something went wrong")

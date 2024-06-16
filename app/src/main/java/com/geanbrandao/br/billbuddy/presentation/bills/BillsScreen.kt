@@ -16,10 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import com.geanbrandao.br.billbuddy.R
 import com.geanbrandao.br.billbuddy.domain.model.BillModel
 import com.geanbrandao.br.billbuddy.presentation.bills.components.BillItem
 import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsIntent
@@ -28,8 +31,11 @@ import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsIntent.OnCon
 import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent
 import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent.NavigateToBill
 import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent.NavigateToBillDetails
+import com.geanbrandao.br.billbuddy.presentation.bills.intents.BillsNavigationIntent.NavigateToGroups
 import com.geanbrandao.br.billbuddy.presentation.bills.state.BillsUiState
+import com.geanbrandao.br.billbuddy.presentation.common.BaseScreen
 import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
+import com.geanbrandao.br.billbuddy.presentation.common.CustomTopAppBar
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
@@ -61,59 +67,78 @@ private fun BillsView(
     onIntent: (BillsIntent) -> Unit = {},
     onNavigationIntent: (BillsNavigationIntent) -> Unit = {},
 ) {
-    Column(
-        modifier = modifier
-            .background(color = MaterialTheme.colorScheme.background)
-            .padding(horizontal = PaddingTwo)
-            .fillMaxSize()
-    ) {
-        LazyColumn(
-            modifier = Modifier.weight(1f)
-        ) {
-            item {
-                Spacer(modifier = Modifier.size(size = PaddingTwo))
-                Text(
-                    text = "Contas cadastradas",
-                    style = MaterialTheme.typography.labelLarge,
-                )
-                Spacer(modifier = Modifier.size(size = PaddingTwo))
-            }
-            items(uiState.bills) { billItem: BillModel ->
-                BillItem(
-                    modifier = Modifier.padding(vertical = PaddingOne),
-                    billItem = billItem,
-                    onRemoveClicked = {
-                        onIntent(OnConfirmationDialogRemoveBill(isOpen = true, billId = billItem.id))
-                    },
-                    onItemClicked = {
-                        onNavigationIntent(NavigateToBillDetails(id = billItem.id))
+    BaseScreen(
+        header = { Header(onNavigationIntent) },
+        content = {
+            Column(
+                modifier = modifier
+                    .background(color = MaterialTheme.colorScheme.background)
+                    .padding(horizontal = PaddingTwo)
+                    .fillMaxSize()
+            ) {
+                LazyColumn(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    item {
+                        Spacer(modifier = Modifier.size(size = PaddingTwo))
+                        Text(
+                            text = "Contas cadastradas",
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                        Spacer(modifier = Modifier.size(size = PaddingTwo))
                     }
+                    items(uiState.bills) { billItem: BillModel ->
+                        BillItem(
+                            modifier = Modifier.padding(vertical = PaddingOne),
+                            billItem = billItem,
+                            onRemoveClicked = {
+                                onIntent(OnConfirmationDialogRemoveBill(isOpen = true, billId = billItem.id))
+                            },
+                            onItemClicked = {
+                                onNavigationIntent(NavigateToBillDetails(id = billItem.id))
+                            }
+                        )
+                    }
+                }
+                Button(
+                    onClick = {
+                        onNavigationIntent(NavigateToBill(-1))
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = PaddingTwo)
+                ) {
+                    Text(text = "Criar conta")
+                }
+                ConfirmationDialog(
+                    isVisible = uiState.isConfirmationDialogOpen,
+                    title = "Deseja excluir essa conta?",
+                    message = "Todas os dados e pessoas dessa conta serão removidos. Essa ação não poderá ser desfeita.",
+                    onDismiss = {
+                        onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
+                    },
+                    onConfirm = {
+                        onIntent(OnConfirmationDialogRemoveBillPositiveButtonClicked(billId = uiState.idBillToRemove))
+                        onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
+                    },
                 )
             }
         }
-        Button(
-            onClick = {
-                onNavigationIntent(NavigateToBill(-1))
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = PaddingTwo)
-        ) {
-            Text(text = "Criar conta")
-        }
-        ConfirmationDialog(
-            isVisible = uiState.isConfirmationDialogOpen,
-            title = "Deseja excluir essa conta?",
-            message = "Todas os dados e pessoas dessa conta serão removidos. Essa ação não poderá ser desfeita.",
-            onDismiss = {
-                onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
-            },
-            onConfirm = {
-                onIntent(OnConfirmationDialogRemoveBillPositiveButtonClicked(billId = uiState.idBillToRemove))
-                onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
-            },
-        )
-    }
+    )
+}
+
+@Composable
+private fun Header(
+    onNavigationIntent: (BillsNavigationIntent) -> Unit,
+) {
+    CustomTopAppBar(
+        title = stringResource(id = R.string.screen_bills_top_bar_title),
+        canNavigateBack = false,
+        onArrowBackClicked = {  },
+        actionIcon = painterResource(id = R.drawable.ic_groups),
+        actionIconContentDescription = "Acessar grupos",
+        onActionClicked = { onNavigationIntent(NavigateToGroups) },
+    )
 }
 
 @Preview

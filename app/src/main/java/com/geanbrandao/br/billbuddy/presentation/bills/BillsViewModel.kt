@@ -41,6 +41,10 @@ class BillsViewModel(
                 }
 
                 is BillsNavigationIntent.NavigateToBillDetails -> {
+                    appNavigator.navigateTo(route = intent.route) // todo remover double assert
+                }
+
+                BillsNavigationIntent.NavigateToGroups -> {
                     appNavigator.navigateTo(route = intent.route)
                 }
             }

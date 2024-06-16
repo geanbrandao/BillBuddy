@@ -14,6 +14,7 @@ import com.geanbrandao.br.billbuddy.presentation.billdetails.BillDetailsScreen
 import com.geanbrandao.br.billbuddy.presentation.bills.BillsScreen
 import com.geanbrandao.br.billbuddy.presentation.closebill.CloseBillScreen
 import com.geanbrandao.br.billbuddy.presentation.createitem.CreateItemScreen
+import com.geanbrandao.br.billbuddy.presentation.groups.GroupsScreen
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.androidx.compose.koinViewModel
 
@@ -78,6 +79,9 @@ fun NavigationView(
         }
         composable(Screen.CloseBill.route) {
             CloseBillScreen()
+        }
+        composable(Screen.Groups.route) {
+            GroupsScreen()
         }
     }
 }

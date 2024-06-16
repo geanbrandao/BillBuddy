@@ -10,4 +10,7 @@
     <string name="screen_create_item_top_bar_title">Adicionar item</string>
 
     <string name="screen_close_bill_top_bar_title">Fechar conta</string>
+    <string name="screen_groups_top_bar_title">Grupos</string>
+
+    <string name="options_menu_label_remove">Excluir</string>
 </resources>
