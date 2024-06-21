@@ -10,6 +10,9 @@ val PaddingFour = 32.dp
 val PaddingFive = 48.dp
 val PaddingSix = 64.dp
 val PaddingSeven = 96.dp
+val PaddingEight = 128.dp
+
+val FooterHeight = 128.dp
 
 val CornerSizeHalf = 4.dp
 val CornerSizeOne = 8.dp

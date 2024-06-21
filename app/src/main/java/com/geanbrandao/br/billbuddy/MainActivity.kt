@@ -17,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
@@ -25,7 +24,6 @@ import androidx.navigation.compose.rememberNavController
 import com.geanbrandao.br.billbuddy.domain.model.SnackbarType
 import com.geanbrandao.br.billbuddy.navigation.NavigationView
 import com.geanbrandao.br.billbuddy.navigation.Screen
-import com.geanbrandao.br.billbuddy.presentation.common.CustomTopAppBar
 import com.geanbrandao.br.billbuddy.presentation.common.WarningSnackbar
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
@@ -67,17 +65,6 @@ class MainActivity : ComponentActivity() {
                 BillBuddyTheme(darkTheme = false) {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
-                        topBar = if (isTopAppBarVisible.value) {
-                            {
-                                CustomTopAppBar(
-                                    title = stringResource(id = screenTitle.intValue),
-                                    canNavigateBack = canNavigateBack.value,
-                                    onArrowBackClicked = { navController.popBackStack() }
-                                )
-                            }
-                        } else {
-                            { }
-                        },
                         snackbarHost = {
                             CustomSnackbarHost(snackbarHostState, snackbarType.value)
                         },

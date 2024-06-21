@@ -41,6 +41,8 @@ class BillViewModel(
                 is ShowWarningSnackbar -> {
                     appNavigator.showSnackbar(message = intent.message)
                 }
+
+                BillNavigationIntent.NavigateBack -> TODO()
             }
         }
     }

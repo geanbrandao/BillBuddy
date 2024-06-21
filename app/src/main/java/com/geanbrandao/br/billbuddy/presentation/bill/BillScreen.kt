@@ -1,7 +1,6 @@
 package com.geanbrandao.br.billbuddy.presentation.bill
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -11,17 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.geanbrandao.br.billbuddy.R
 import com.geanbrandao.br.billbuddy.presentation.bill.components.BillNameInput
 import com.geanbrandao.br.billbuddy.presentation.bill.components.PersonNameInput
 import com.geanbrandao.br.billbuddy.presentation.bill.intents.BillIntent
@@ -32,9 +31,11 @@ import com.geanbrandao.br.billbuddy.presentation.bill.intents.BillIntent.OnPerso
 import com.geanbrandao.br.billbuddy.presentation.bill.intents.BillIntent.OnRemovePerson
 import com.geanbrandao.br.billbuddy.presentation.bill.intents.BillNavigationIntent
 import com.geanbrandao.br.billbuddy.presentation.bill.state.BillUiState
+import com.geanbrandao.br.billbuddy.presentation.common.BaseScreen
+import com.geanbrandao.br.billbuddy.presentation.common.CustomTopAppBar
 import com.geanbrandao.br.billbuddy.presentation.common.PersonItem
+import com.geanbrandao.br.billbuddy.presentation.common.PrimaryButton
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
-import com.geanbrandao.br.billbuddy.ui.theme.PaddingFour
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingSeven
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
@@ -62,72 +63,62 @@ private fun BillView(
     onNavigationIntent: (BillNavigationIntent) -> Unit = {}
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val scrollState = rememberScrollState()
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-//                .verticalScroll(scrollState)
-//                .padding(horizontal = PaddingTwo)
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            Spacer(modifier = Modifier.size(PaddingThree))
-            BillNameInput(
-                text = uiState.billName,
-                onTextChange = { text: String ->
-                    onBillIntent(OnBillNameChange(value = text))
-                },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = PaddingTwo),
-            )
-            Spacer(modifier = Modifier.size(PaddingTwo))
-            PersonNameInput(
-                text = uiState.personName,
-                onTextChange = { text: String ->
-                    onBillIntent(OnPersonNameChange(value = text))
-                },
-                onAddPerson = {
-                    keyboardController?.hide()
-                    onBillIntent(OnAddNewPerson(value = uiState.personName))
-                },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = PaddingTwo),
-            )
-            PersonsView(
-                persons = uiState.persons,
-                onRemoveClicked = { personName: String ->
-                    onBillIntent(OnRemovePerson(value = personName))
-                },
-                modifier = Modifier.fillMaxWidth()
+    BaseScreen(
+        header = { Header(onNavigationIntent) },
+        content = {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                Spacer(modifier = Modifier.size(PaddingThree))
+                BillNameInput(
+                    text = uiState.billName,
+                    onTextChange = { text: String ->
+                        onBillIntent(OnBillNameChange(value = text))
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = PaddingTwo),
+                )
+                Spacer(modifier = Modifier.size(PaddingTwo))
+                PersonNameInput(
+                    text = uiState.personName,
+                    onTextChange = { text: String ->
+                        onBillIntent(OnPersonNameChange(value = text))
+                    },
+                    onAddPerson = {
+                        keyboardController?.hide()
+                        onBillIntent(OnAddNewPerson(value = uiState.personName))
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = PaddingTwo),
+                )
+                PersonsView(
+                    persons = uiState.persons,
+                    onRemoveClicked = { personName: String ->
+                        onBillIntent(OnRemovePerson(value = personName))
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        fixedFooter = {
+            PrimaryButton(
+                text = "Salvar",
+                onClick = { onBillIntent(OnCreateBill) },
             )
         }
-        Button( // TODO create component fixed bottom primary button
-            onClick = {
-                onBillIntent(OnCreateBill)
-            },
-            enabled = uiState.isEnabled,
-            modifier = Modifier
-//                .fadingEdge(getTopFade())
-//                .background(color = MaterialTheme.colorScheme.background)
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = PaddingTwo)
-                .padding(bottom = PaddingFour)
-                .padding(top = PaddingTwo)
-        ) {
-            Text(text = "Salvar")
-        }
-    }
+    )
 }
 
 @Composable
-fun PersonsView(
+private fun PersonsView(
     modifier: Modifier = Modifier,
     persons: List<String> = listOf(),
     onRemoveClicked: (String) -> Unit = {},
 ) {
-
     LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(bottom = PaddingSeven)
@@ -155,7 +146,20 @@ fun PersonsView(
             )
         }
     }
-    
+}
+
+@Composable
+private fun Header(
+    onNavigationIntent: (BillNavigationIntent) -> Unit,
+) {
+    CustomTopAppBar(
+        title = stringResource(id = R.string.screen_bills_top_bar_title),
+        canNavigateBack = true,
+        onArrowBackClicked = {
+//            onNavigationIntent(BillNavigationIntent.NavigateBack)
+        },
+        actionIcon = painterResource(id = R.drawable.ic_groups),
+    )
 }
 
 @Composable

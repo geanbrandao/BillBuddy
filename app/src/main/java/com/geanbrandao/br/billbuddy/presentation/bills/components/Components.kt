@@ -1,7 +1,6 @@
 package com.geanbrandao.br.billbuddy.presentation.bills.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,9 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -19,13 +19,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.geanbrandao.br.billbuddy.domain.model.BillModel
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
-import com.geanbrandao.br.billbuddy.ui.theme.CornerSizeOne
+import com.geanbrandao.br.billbuddy.ui.theme.ElevationOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
 
@@ -51,30 +50,30 @@ private fun BillItemView(
     onRemoveClicked: () -> Unit = {},
     onItemClicked: () -> Unit = {},
 ) {
-    Column(
+    Card(
+        onClick = onItemClicked,
         modifier = modifier
-            .fillMaxWidth()
-            .clickable(
-                role = Role.Button,
-                onClick = onItemClicked
-            )
-            .background(
-                color = MaterialTheme.colorScheme.surfaceContainer,
-                shape = RoundedCornerShape(size = CornerSizeOne)
-            )
-            .padding(PaddingTwo),
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = ElevationOne,
+        )
     ) {
         Row(
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .padding(horizontal = PaddingTwo)
+                .padding(top = PaddingOne),
         ) {
             Text(
                 text = billItem.name,
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleLarge,
             )
-            Spacer(modifier = Modifier
-                .weight(1f)
-                .padding(all = PaddingOne))
+            Spacer(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(all = PaddingOne)
+            )
             IconButton(onClick = onRemoveClicked) {
                 Icon(
                     imageVector = Icons.Rounded.Delete,
@@ -85,15 +84,18 @@ private fun BillItemView(
         }
         Spacer(modifier = Modifier.size(PaddingTwo))
         Row(
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier.padding(horizontal = PaddingTwo),
         ) {
             Text(
                 text = "Status:",
                 color = MaterialTheme.colorScheme.primary,
             )
-            Spacer(modifier = Modifier
-                .weight(1f)
-                .padding(all = PaddingOne))
+            Spacer(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(all = PaddingOne)
+            )
             Text(
                 text = billItem.status,
                 style = MaterialTheme.typography.bodyLarge,
@@ -102,22 +104,26 @@ private fun BillItemView(
         }
         Spacer(modifier = Modifier.size(PaddingTwo))
         Row(
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .padding(horizontal = PaddingTwo)
+                .padding(bottom = PaddingTwo),
         ) {
             Text(
                 text = "Valor da conta:",
                 color = MaterialTheme.colorScheme.primary,
             )
-            Spacer(modifier = Modifier
-                .weight(1f)
-                .padding(all = PaddingOne))
+            Spacer(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(all = PaddingOne)
+            )
             Text(
                 text = billItem.total,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
             )
         }
-
     }
 }
 

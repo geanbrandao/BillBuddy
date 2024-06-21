@@ -1,6 +1,5 @@
 package com.geanbrandao.br.billbuddy.presentation.common
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -11,9 +10,9 @@ import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 
 @Composable
-fun getTopFade() = Brush.verticalGradient(
+fun getTopFade(color: Color) = Brush.verticalGradient(
     0f to Color.Transparent,
-    0.3f to MaterialTheme.colorScheme.background
+    0.3f to color,
 )
 
 fun Modifier.fadingEdge(brush: Brush) = this

@@ -1,15 +1,11 @@
 package com.geanbrandao.br.billbuddy.presentation.bills
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,7 +32,10 @@ import com.geanbrandao.br.billbuddy.presentation.bills.state.BillsUiState
 import com.geanbrandao.br.billbuddy.presentation.common.BaseScreen
 import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
 import com.geanbrandao.br.billbuddy.presentation.common.CustomTopAppBar
+import com.geanbrandao.br.billbuddy.presentation.common.PrimaryButton
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
+import com.geanbrandao.br.billbuddy.ui.theme.PaddingEight
+import com.geanbrandao.br.billbuddy.ui.theme.PaddingFour
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
 import org.koin.androidx.compose.koinViewModel
@@ -70,59 +69,58 @@ private fun BillsView(
     BaseScreen(
         header = { Header(onNavigationIntent) },
         content = {
-            Column(
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = PaddingEight),
                 modifier = modifier
-                    .background(color = MaterialTheme.colorScheme.background)
-                    .padding(horizontal = PaddingTwo)
-                    .fillMaxSize()
+                .padding(horizontal = PaddingTwo)
             ) {
-                LazyColumn(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    item {
-                        Spacer(modifier = Modifier.size(size = PaddingTwo))
-                        Text(
-                            text = "Contas cadastradas",
-                            style = MaterialTheme.typography.labelLarge,
-                        )
-                        Spacer(modifier = Modifier.size(size = PaddingTwo))
-                    }
-                    items(uiState.bills) { billItem: BillModel ->
-                        BillItem(
-                            modifier = Modifier.padding(vertical = PaddingOne),
-                            billItem = billItem,
-                            onRemoveClicked = {
-                                onIntent(OnConfirmationDialogRemoveBill(isOpen = true, billId = billItem.id))
-                            },
-                            onItemClicked = {
-                                onNavigationIntent(NavigateToBillDetails(id = billItem.id))
-                            }
-                        )
-                    }
+                item {
+                    Spacer(modifier = Modifier.size(size = PaddingTwo))
+                    Text(
+                        text = "Contas cadastradas",
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                    Spacer(modifier = Modifier.size(size = PaddingTwo))
                 }
-                Button(
-                    onClick = {
-                        onNavigationIntent(NavigateToBill(-1))
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = PaddingTwo)
-                ) {
-                    Text(text = "Criar conta")
+                items(uiState.bills) { billItem: BillModel ->
+                    BillItem(
+                        modifier = Modifier.padding(vertical = PaddingOne),
+                        billItem = billItem,
+                        onRemoveClicked = {
+                            onIntent(
+                                OnConfirmationDialogRemoveBill(
+                                    isOpen = true,
+                                    billId = billItem.id
+                                )
+                            )
+                        },
+                        onItemClicked = {
+                            onNavigationIntent(NavigateToBillDetails(id = billItem.id))
+                        }
+                    )
                 }
-                ConfirmationDialog(
-                    isVisible = uiState.isConfirmationDialogOpen,
-                    title = "Deseja excluir essa conta?",
-                    message = "Todas os dados e pessoas dessa conta serão removidos. Essa ação não poderá ser desfeita.",
-                    onDismiss = {
-                        onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
-                    },
-                    onConfirm = {
-                        onIntent(OnConfirmationDialogRemoveBillPositiveButtonClicked(billId = uiState.idBillToRemove))
-                        onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
-                    },
-                )
             }
+            ConfirmationDialog(
+                isVisible = uiState.isConfirmationDialogOpen,
+                title = "Deseja excluir essa conta?",
+                message = "Todas os dados e pessoas dessa conta serão removidos. Essa ação não poderá ser desfeita.",
+                onDismiss = {
+                    onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
+                },
+                onConfirm = {
+                    onIntent(OnConfirmationDialogRemoveBillPositiveButtonClicked(billId = uiState.idBillToRemove))
+                    onIntent(OnConfirmationDialogRemoveBill(isOpen = false))
+                },
+            )
+        },
+        fixedFooter = {
+            PrimaryButton(
+                text = "Criar conta",
+                onClick = { onNavigationIntent(NavigateToBill(-1)) },
+                modifier = Modifier
+                    .padding(bottom = PaddingFour)
+                    .padding(horizontal = PaddingTwo)
+            )
         }
     )
 }
@@ -134,7 +132,7 @@ private fun Header(
     CustomTopAppBar(
         title = stringResource(id = R.string.screen_bills_top_bar_title),
         canNavigateBack = false,
-        onArrowBackClicked = {  },
+        onArrowBackClicked = { },
         actionIcon = painterResource(id = R.drawable.ic_groups),
         actionIconContentDescription = "Acessar grupos",
         onActionClicked = { onNavigationIntent(NavigateToGroups) },
@@ -150,6 +148,8 @@ private fun BillsPreview() {
                 BillModel(id = 1, name = "Conta 1", status = "Em aberto", total = "R$ 10,00"),
                 BillModel(id = 2, name = "Conta 2", status = "Nova", total = "R$ 10,00"),
                 BillModel(id = 3, name = "Conta 3", status = "Fechada", total = "R$ 10,00"),
+                BillModel(id = 4, name = "Conta 4", status = "Fechada", total = "R$ 10,00"),
+                BillModel(id = 5, name = "Conta 5", status = "Fechada", total = "R$ 10,00"),
             )
         )
         BillsView(uiState = uiState)
