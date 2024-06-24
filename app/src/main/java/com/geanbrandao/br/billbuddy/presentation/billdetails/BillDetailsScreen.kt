@@ -2,7 +2,6 @@ package com.geanbrandao.br.billbuddy.presentation.billdetails
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,6 +40,7 @@ import com.geanbrandao.br.billbuddy.presentation.billdetails.intents.BillDetails
 import com.geanbrandao.br.billbuddy.presentation.billdetails.intents.BillDetailsNavigationIntent.NavigateToCloseBill
 import com.geanbrandao.br.billbuddy.presentation.billdetails.intents.BillDetailsNavigationIntent.NavigateToCreateItem
 import com.geanbrandao.br.billbuddy.presentation.billdetails.state.BillDetailsUiState
+import com.geanbrandao.br.billbuddy.presentation.common.BaseScreen
 import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingSix
@@ -87,21 +87,21 @@ private fun BillDetailsView(
             }
     }
 
-    Surface {
-        Box {
-            Column(
-                modifier = modifier.fillMaxSize()
-            ) {
-                TopAppBarBillDetails(
-                    isExpanded = isTopBarExpanded.value,
-                    billName = uiState.billName,
-                    uiState.totalValueFormatted,
-                    uiState.spentByPerson,
-                    onArrowBackClicked = { onNavigationIntent(NavigateBack) },
-                    onEditClicked = {},
-                    onExpandClicked = { isTopBarExpanded.value = true },
-                    onCloseBillClicked = { onNavigationIntent(NavigateToCloseBill(billId = uiState.billId)) },
-                )
+    BaseScreen(
+        header = {
+            TopAppBarBillDetails(
+                isExpanded = isTopBarExpanded.value,
+                billName = uiState.billName,
+                uiState.totalValueFormatted,
+                uiState.spentByPerson,
+                onArrowBackClicked = { onNavigationIntent(NavigateBack) },
+                onEditClicked = {},
+                onExpandClicked = { isTopBarExpanded.value = true },
+                onCloseBillClicked = { onNavigationIntent(NavigateToCloseBill(billId = uiState.billId)) },
+            )
+        },
+        content = {
+            Box {
                 LazyColumn(
                     state = listState,
                     verticalArrangement = Arrangement.spacedBy(PaddingTwo),
@@ -144,16 +144,20 @@ private fun BillDetailsView(
                         onBillDetailsIntent(OnConfirmationDialogRemoveItem(isOpen = false))
                     },
                 )
-            }
-            FloatingActionButton(
-                onClick = { onNavigationIntent(NavigateToCreateItem(billId = uiState.billId)) },
-                modifier = Modifier
-                    .align(alignment = Alignment.BottomEnd)
-                    .padding(end = PaddingTwo, bottom = PaddingThree)
-            ) {
-                Icon(Icons.Rounded.Add, "Adicionar uma item")
+                FloatingActionButton(
+                    onClick = { onNavigationIntent(NavigateToCreateItem(billId = uiState.billId)) },
+                    modifier = Modifier
+                        .align(alignment = Alignment.BottomEnd)
+                        .padding(end = PaddingTwo, bottom = PaddingThree)
+                ) {
+                    Icon(Icons.Rounded.Add, "Adicionar uma item")
+                }
             }
         }
+    )
+
+
+    Surface {
     }
 }
 
