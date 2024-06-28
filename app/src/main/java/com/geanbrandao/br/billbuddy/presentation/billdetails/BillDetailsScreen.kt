@@ -1,39 +1,28 @@
 package com.geanbrandao.br.billbuddy.presentation.billdetails
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +35,6 @@ import com.geanbrandao.br.billbuddy.domain.model.DividedValueModel
 import com.geanbrandao.br.billbuddy.domain.model.SpentByPersonModel
 import com.geanbrandao.br.billbuddy.presentation.billdetails.components.BillItem
 import com.geanbrandao.br.billbuddy.presentation.billdetails.components.PersonItem
-import com.geanbrandao.br.billbuddy.presentation.billdetails.components.TopAppBarBillDetails
 import com.geanbrandao.br.billbuddy.presentation.billdetails.intents.BillDetailsIntent
 import com.geanbrandao.br.billbuddy.presentation.billdetails.intents.BillDetailsIntent.OnConfirmationDialogRemoveItem
 import com.geanbrandao.br.billbuddy.presentation.billdetails.intents.BillDetailsIntent.OnConfirmationDialogRemoveItemPositiveButtonClicked
@@ -58,15 +46,11 @@ import com.geanbrandao.br.billbuddy.presentation.billdetails.state.BillDetailsUi
 import com.geanbrandao.br.billbuddy.presentation.common.BaseScreen
 import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
 import com.geanbrandao.br.billbuddy.presentation.common.CustomTopAppBar
-import com.geanbrandao.br.billbuddy.presentation.common.fadingEdge
 import com.geanbrandao.br.billbuddy.presentation.common.getBottomFade
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
-import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
-import com.geanbrandao.br.billbuddy.ui.theme.PaddingSix
+import com.geanbrandao.br.billbuddy.ui.theme.PaddingEight
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -87,16 +71,13 @@ fun BillDetailsScreen(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BillDetailsView(
-    modifier: Modifier = Modifier,
     uiState: BillDetailsUiState = BillDetailsUiState(),
     onNavigationIntent: (BillDetailsNavigationIntent) -> Unit = {},
     onBillDetailsIntent: (BillDetailsIntent) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
-    val isTopBarExpanded = remember { mutableStateOf(true) }
 
     BaseScreen(
         header = {
@@ -106,6 +87,7 @@ private fun BillDetailsView(
             Box {
                 LazyColumn(
                     state = listState,
+                    contentPadding = PaddingValues(bottom = PaddingEight),
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     item {
@@ -116,9 +98,7 @@ private fun BillDetailsView(
                     }
                     items(
                         items = uiState.items,
-                        key = {
-                            it.itemId
-                        }
+                        key = { it.itemId }
                     ) { item: ConsumedItemModel ->
                         BillItem(
                             onRemoveClicked = {
@@ -131,9 +111,6 @@ private fun BillDetailsView(
                             },
                             item = item,
                         )
-                    }
-                    item {
-                        Spacer(modifier = Modifier.size(PaddingSix))
                     }
                 }
 
