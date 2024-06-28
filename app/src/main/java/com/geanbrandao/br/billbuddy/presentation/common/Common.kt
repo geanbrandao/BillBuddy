@@ -15,6 +15,14 @@ fun getTopFade(color: Color) = Brush.verticalGradient(
     0.3f to color,
 )
 
+@Composable
+fun getBottomFade(color: Color) = Brush.verticalGradient(
+    0.7f to color,
+    1f to Color.Transparent
+)
+
+//val topBottomFade = Brush.verticalGradient(0f to Color.Transparent, 0.3f to Color.Red, 0.7f to Color.Red, 1f to Color.Transparent)
+
 fun Modifier.fadingEdge(brush: Brush) = this
     .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
     .drawWithContent {

@@ -118,7 +118,7 @@ private fun TopAppBarBillDetailsView(
                     )
                 }
             }
-            AnimatedVisibility(visible = isExpanded) {
+            AnimatedVisibility(visible = false) {
                 Column {
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(PaddingOne),

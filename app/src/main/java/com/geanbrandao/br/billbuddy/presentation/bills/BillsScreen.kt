@@ -82,7 +82,10 @@ private fun BillsView(
                     )
                     Spacer(modifier = Modifier.size(size = PaddingTwo))
                 }
-                items(uiState.bills) { billItem: BillModel ->
+                items(
+                    items = uiState.bills,
+                    key = { item -> item.id },
+                ) { billItem: BillModel ->
                     BillItem(
                         modifier = Modifier.padding(vertical = PaddingOne),
                         billItem = billItem,

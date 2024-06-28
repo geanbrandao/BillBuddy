@@ -22,6 +22,10 @@ val TopAppBarHeight = 64.dp
 val ElevationHalf = 4.dp
 val ElevationOne = 8.dp
 
+val TonalElevationOne = 2.dp
+val TonalElevationTwo = 4.dp
+val TonalElevationThree = 8.dp
+
 val CheckboxRowHeight = 56.dp
 
 val BorderWidthOne = 1.dp

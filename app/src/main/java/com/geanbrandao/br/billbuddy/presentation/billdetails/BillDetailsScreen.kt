@@ -1,20 +1,30 @@
 package com.geanbrandao.br.billbuddy.presentation.billdetails
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -23,14 +33,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import com.geanbrandao.br.billbuddy.R
 import com.geanbrandao.br.billbuddy.domain.model.ConsumedItemModel
 import com.geanbrandao.br.billbuddy.domain.model.DividedValueModel
 import com.geanbrandao.br.billbuddy.domain.model.SpentByPersonModel
 import com.geanbrandao.br.billbuddy.presentation.billdetails.components.BillItem
+import com.geanbrandao.br.billbuddy.presentation.billdetails.components.PersonItem
 import com.geanbrandao.br.billbuddy.presentation.billdetails.components.TopAppBarBillDetails
 import com.geanbrandao.br.billbuddy.presentation.billdetails.intents.BillDetailsIntent
 import com.geanbrandao.br.billbuddy.presentation.billdetails.intents.BillDetailsIntent.OnConfirmationDialogRemoveItem
@@ -42,7 +57,11 @@ import com.geanbrandao.br.billbuddy.presentation.billdetails.intents.BillDetails
 import com.geanbrandao.br.billbuddy.presentation.billdetails.state.BillDetailsUiState
 import com.geanbrandao.br.billbuddy.presentation.common.BaseScreen
 import com.geanbrandao.br.billbuddy.presentation.common.ConfirmationDialog
+import com.geanbrandao.br.billbuddy.presentation.common.CustomTopAppBar
+import com.geanbrandao.br.billbuddy.presentation.common.fadingEdge
+import com.geanbrandao.br.billbuddy.presentation.common.getBottomFade
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
+import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingSix
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
@@ -68,6 +87,7 @@ fun BillDetailsScreen(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BillDetailsView(
     modifier: Modifier = Modifier,
@@ -78,36 +98,22 @@ private fun BillDetailsView(
     val listState = rememberLazyListState()
     val isTopBarExpanded = remember { mutableStateOf(true) }
 
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.firstVisibleItemIndex }
-            .map { index -> index > 0 }
-            .filter { it }
-            .collect {
-                isTopBarExpanded.value = it.not()
-            }
-    }
-
     BaseScreen(
         header = {
-            TopAppBarBillDetails(
-                isExpanded = isTopBarExpanded.value,
-                billName = uiState.billName,
-                uiState.totalValueFormatted,
-                uiState.spentByPerson,
-                onArrowBackClicked = { onNavigationIntent(NavigateBack) },
-                onEditClicked = {},
-                onExpandClicked = { isTopBarExpanded.value = true },
-                onCloseBillClicked = { onNavigationIntent(NavigateToCloseBill(billId = uiState.billId)) },
-            )
+            Header(billName = uiState.billName, onNavigationIntent = onNavigationIntent)
         },
         content = {
             Box {
                 LazyColumn(
                     state = listState,
-                    verticalArrangement = Arrangement.spacedBy(PaddingTwo),
-                    contentPadding = PaddingValues(all = PaddingTwo),
                     modifier = Modifier.fillMaxSize(),
                 ) {
+                    item {
+                        BillBalance(uiState, onNavigationIntent)
+                    }
+                    item {
+                        PersonsBalance(uiState)
+                    }
                     items(
                         items = uiState.items,
                         key = {
@@ -130,6 +136,7 @@ private fun BillDetailsView(
                         Spacer(modifier = Modifier.size(PaddingSix))
                     }
                 }
+
                 ConfirmationDialog(
                     isVisible = uiState.isConfirmationDialogOpen,
                     title = "Deseja excluir esse item?",
@@ -150,14 +157,85 @@ private fun BillDetailsView(
                         .align(alignment = Alignment.BottomEnd)
                         .padding(end = PaddingTwo, bottom = PaddingThree)
                 ) {
-                    Icon(Icons.Rounded.Add, "Adicionar uma item")
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_add),
+                        contentDescription = "Adicionar uma item"
+                    )
                 }
             }
         }
     )
+}
 
+@Composable
+private fun Header(
+    billName: String,
+    onNavigationIntent: (BillDetailsNavigationIntent) -> Unit,
+) {
 
-    Surface {
+    CustomTopAppBar(
+        title = billName,
+        canNavigateBack = true,
+        onArrowBackClicked = { onNavigationIntent(NavigateBack) },
+        actionIcon = painterResource(id = R.drawable.ic_edit),
+        actionIconContentDescription = "Editar conta",
+        onActionClicked = { }
+    )
+}
+
+@Composable
+private fun PersonsBalance(
+    uiState: BillDetailsUiState,
+) {
+    val lazyRowState = rememberLazyListState()
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(PaddingTwo),
+        contentPadding = PaddingValues(all = PaddingTwo),
+        state = lazyRowState,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        items(
+            items = uiState.spentByPerson,
+            key = { it.personId }
+        ) { person: SpentByPersonModel ->
+            PersonItem(person)
+        }
+    }
+
+}
+
+@Composable
+private fun BillBalance(
+    uiState: BillDetailsUiState,
+    onNavigationIntent: (BillDetailsNavigationIntent) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .background(brush = getBottomFade(color = MaterialTheme.colorScheme.background))
+            .fillMaxWidth()
+            .padding(PaddingTwo)
+    ) {
+        Row(
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = "Total: ",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = uiState.totalValueFormatted,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.ExtraBold,
+            )
+
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Button(
+            onClick = { onNavigationIntent(NavigateToCloseBill(billId = uiState.billId)) },
+        ) {
+            Text(text = "Fechar")
+        }
     }
 }
 

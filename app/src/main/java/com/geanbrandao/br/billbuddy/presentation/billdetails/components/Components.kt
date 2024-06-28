@@ -1,6 +1,5 @@
 package com.geanbrandao.br.billbuddy.presentation.billdetails.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,10 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,13 +22,14 @@ import com.geanbrandao.br.billbuddy.R
 import com.geanbrandao.br.billbuddy.domain.model.ConsumedItemModel
 import com.geanbrandao.br.billbuddy.domain.model.DividedValueModel
 import com.geanbrandao.br.billbuddy.domain.model.SpentByPersonModel
+import com.geanbrandao.br.billbuddy.presentation.common.RoundedCornerCard
 import com.geanbrandao.br.billbuddy.presentation.common.SwipeLeft
 import com.geanbrandao.br.billbuddy.ui.theme.BillBuddyTheme
-import com.geanbrandao.br.billbuddy.ui.theme.CornerSizeOne
-import com.geanbrandao.br.billbuddy.ui.theme.ElevationOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingHalf
+import com.geanbrandao.br.billbuddy.ui.theme.PaddingOne
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingThree
 import com.geanbrandao.br.billbuddy.ui.theme.PaddingTwo
+import com.geanbrandao.br.billbuddy.ui.theme.TonalElevationThree
 
 @Composable
 fun PersonItem(
@@ -46,12 +44,7 @@ private fun PersonItemView(
     modifier: Modifier = Modifier,
     person: SpentByPersonModel = SpentByPersonModel(billId = 1, personId = 1, name = "Pessoa 1", totalSpent = 45.0f),
 ) {
-    Surface(
-        modifier = modifier,
-        shadowElevation = ElevationOne,
-        color = MaterialTheme.colorScheme.tertiaryContainer,
-        shape = RoundedCornerShape(CornerSizeOne),
-    ) {
+    RoundedCornerCard(modifier = modifier, tonalElevation = TonalElevationThree) {
         Column(
             modifier = Modifier.padding(PaddingTwo),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -104,40 +97,39 @@ private fun BillItemView(
 ) {
     SwipeLeft(
         onDeleteClicked = onRemoveClicked,
+        modifier = modifier.padding(horizontal = PaddingTwo, vertical = PaddingOne),
         content = {
-            Column(
-                modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(CornerSizeOne),
-                    )
-                    .padding(all = PaddingTwo)
-                    .fillMaxWidth()
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        text = item.name,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    Text(
-                        text = item.formatedValue,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    )
+            RoundedCornerCard(
+                content = {
+                    Column(
+                        Modifier
+                            .padding(all = PaddingTwo)
+                            .fillMaxWidth()
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(
+                                text = item.name,
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                            Text(
+                                text = item.formatedValue,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        Spacer(modifier = Modifier.size(PaddingTwo))
+                        if (item.dividedValues.size == 1) {
+                            DividedByOne(item)
+                        } else {
+                            DividedByMany(item)
+                        }
+                    }
                 }
-                Spacer(modifier = Modifier.size(PaddingTwo))
-                if (item.dividedValues.size == 1) {
-                    DividedByOne(item)
-                } else {
-                    DividedByMany(item)
-                }
-            }
+            )
         }
     )
 }
